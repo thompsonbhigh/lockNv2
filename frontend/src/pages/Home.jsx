@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useEffect } from "react";
 
 const Home = ({userInfo}) => {
@@ -9,7 +10,7 @@ const Home = ({userInfo}) => {
                 <div class="home-card">
                     <h2>fitness</h2>
                     <p>rank: <span>{userInfo.workoutRank}</span></p>
-                    <a href="/plan"></a>
+                    <Link to='/fitness' />
                 </div>
 
                 <div class="home-card">

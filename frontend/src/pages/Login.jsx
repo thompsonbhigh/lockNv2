@@ -10,7 +10,6 @@ export default function Login({setIsLoggedIn, setUser}) {
 
     async function tryLogin(event) {
         event.preventDefault();
-        console.log(username, password);
         try {
             const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',

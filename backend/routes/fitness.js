@@ -10,45 +10,44 @@ let currDay;
 router.get('/', auth, async function(req, res){
     workouts = [];
     isEditing = false;
-
-    const userWorkoutInfo = await db.query('SELECT rank, workouts_completed from workout_leaderboard WHERE username = $1', [req.cookies.user.username]);
-    const userWorkoutRank = userWorkoutInfo.rows.at(0).rank;
-    const userWorkoutsCompleted = userWorkoutInfo.rows.at(0).workouts_completed;
+    const username = req.session.user.username;
+    const userId = req.session.user.id;
 
     const currDate = new Date();
     const today = currDate.toLocaleDateString('en-CA').slice(0, 10);
 
-    const workedOutInfo = await db.query('SELECT last_workout_date FROM users WHERE id = $1', [req.cookies.user.id]);
+    const workedOutInfo = await db.query('SELECT last_workout_date FROM users WHERE id = $1', [userId]);
     const lastWorkoutDate = workedOutInfo.rows.at(0).last_workout_date;
     const hasWorkedOutToday = lastWorkoutDate ? lastWorkoutDate.toLocaleDateString('en-CA').slice(0, 10) === today : null;
 
-    const getCurrentInfo = await db.query('SELECT current FROM workouts WHERE user_id = $1 AND current = TRUE', [req.cookies.user.id]);
+    const getCurrentInfo = await db.query('SELECT current FROM workouts WHERE user_id = $1 AND current = TRUE', [userId]);
     const currentInfo = getCurrentInfo.rows.at(0);
     if (!currentInfo) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = 0', [req.cookies.user.id]);
+        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = 0', [userId]);
     }
 
-    const workoutNamesInfo = await db.query('SELECT DISTINCT name, day FROM workouts WHERE user_id = $1 AND current = TRUE ORDER BY day ASC', [req.cookies.user.id]);
+    const workoutNamesInfo = await db.query('SELECT DISTINCT name, day FROM workouts WHERE user_id = $1 AND current = TRUE ORDER BY day ASC', [userId]);
     const workoutNames = workoutNamesInfo.rows.at(0);
     const {rows} = await db.query('SELECT exercises.name AS exercise_name, workouts.id, workouts.day, workouts.name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 ORDER BY index ASC',
-         [req.cookies.user.id]);
+         [userId]);
     workouts = rows;
-
-    const lastWorkoutInfo = await db.query('SELECT last_workout FROM users WHERE id = $1', [req.cookies.user.id]);
-    const lastWorkout = lastWorkoutInfo.rows.at(0).last_workout;
 
     if (!workoutNames) {
         res.redirect('plan/edit');
     }
 
-    res.render('plan', {
+    const formattedLastWorkoutDate = lastWorkoutDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    console.log(formattedLastWorkoutDate);
+
+    res.json({
         workouts: workouts, 
         workoutNames: workoutNames, 
         hasWorkedOutToday: hasWorkedOutToday, 
-        userWorkoutRank: userWorkoutRank, 
-        userWorkoutsCompleted: userWorkoutsCompleted, 
-        lastWorkout: lastWorkout,
-        lastWorkoutDate: lastWorkoutDate ? lastWorkoutDate.toLocaleDateString('en-CA').slice(0, 10) : null
+        lastWorkoutDate: formattedLastWorkoutDate ? formattedLastWorkoutDate.toString() : null
     });
 });
 
@@ -64,9 +63,9 @@ router.post('/', (req, res) => {
 
 router.post('/delete', async (req,res) => {
     const { workoutId } = req.body;
-    const deletedIndexInfo = await db.query('DELETE FROM workouts WHERE id = $1 AND user_id = $2 RETURNING index, day', [workoutId, req.cookies.user.id]);
+    const deletedIndexInfo = await db.query('DELETE FROM workouts WHERE id = $1 AND user_id = $2 RETURNING index, day', [workoutId, userId]);
     const deletedIndex = deletedIndexInfo.rows.at(0).index;
-    await db.query('UPDATE workouts SET index = index - 1 WHERE user_id = $1 AND index > $2 AND day = $3', [req.cookies.user.id, deletedIndex, deletedIndexInfo.rows.at(0).day]);
+    await db.query('UPDATE workouts SET index = index - 1 WHERE user_id = $1 AND index > $2 AND day = $3', [userId, deletedIndex, deletedIndexInfo.rows.at(0).day]);
     res.redirect('/plan/edit');
 });
 
@@ -77,7 +76,7 @@ router.get('/edit', async (req, res) => {
     
     const newWorkoutsInfo = await db.query(
         'SELECT exercises.name, workouts.day, workouts.id, workouts.name AS workout_name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 AND day = $2 ORDER BY index ASC',
-         [req.cookies.user.id, currDay]);
+         [id, currDay]);
     const newWorkouts = newWorkoutsInfo.rows;
     res.render('editWorkout', {workouts: newWorkouts, day: currDay});
 });
@@ -87,7 +86,7 @@ router.post('/edit', async (req, res) => {
     if (editDay) {
         currDay = editDay;
     } else if (!isEditing) {
-        const dayInfo = await db.query('SELECT day FROM workouts WHERE user_id = $1 ORDER BY day DESC LIMIT 1', [req.cookies.user.id]);
+        const dayInfo = await db.query('SELECT day FROM workouts WHERE user_id = $1 ORDER BY day DESC LIMIT 1', [userId]);
         currDay = dayInfo.rows.at(0)?.day;
         if (currDay == undefined) {
             currDay = 0;
@@ -98,7 +97,7 @@ router.post('/edit', async (req, res) => {
     isEditing = true;
     const newWorkoutsInfo = await db.query(
         'SELECT exercises.name, workouts.day, workouts.id, workouts.name AS workout_name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 AND day = $2 ORDER BY index ASC',
-         [req.cookies.user.id, currDay]);
+         [id, currDay]);
     const newWorkouts = newWorkoutsInfo.rows;
     res.render('editWorkout', {workouts: newWorkouts, day: currDay});
 });
@@ -106,56 +105,56 @@ router.post('/edit', async (req, res) => {
 router.post('/confirm', async (req, res) => {
     isEditing = false;
     const name = req.body.workoutname;
-    await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [req.cookies.user.id]);
-    await db.query('UPDATE workouts SET name = $1, current = TRUE WHERE user_id = $2 AND day = $3', [name, req.cookies.user.id, currDay]);
+    await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [userId]);
+    await db.query('UPDATE workouts SET name = $1, current = TRUE WHERE user_id = $2 AND day = $3', [name, userId, currDay]);
     res.redirect('/plan');
 });
 
 router.post('/cancel', async (req, res) => {
-    await db.query('DELETE FROM workouts WHERE name IS NULL AND user_id = $1', [req.cookies.user.id]);
+    await db.query('DELETE FROM workouts WHERE name IS NULL AND user_id = $1', [userId]);
     res.redirect('/plan');
 });
 
 router.post('/clear', async (req, res) => {
-    await db.query('DELETE FROM workouts WHERE user_id = $1 AND day = $2', [req.cookies.user.id, req.body.clearday]);
+    await db.query('DELETE FROM workouts WHERE user_id = $1 AND day = $2', [userId, req.body.clearday]);
     res.redirect('/plan/edit');
 });
 
 router.post('/back', async (req, res) => {
     const currentDay = req.body.currentday;
-    await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [req.cookies.user.id]);
+    await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [userId]);
     if (currentDay == 0) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE day = (SELECT MAX(day) FROM workouts where user_id = $1) AND user_id = $1', [req.cookies.user.id]);
+        await db.query('UPDATE workouts SET current = TRUE WHERE day = (SELECT MAX(day) FROM workouts where user_id = $1) AND user_id = $1', [userId]);
     } else {
-        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2', [req.cookies.user.id, currentDay - 1]);
+        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2', [userId, currentDay - 1]);
     }
     res.redirect('/plan');
 });
 
 router.post('/next', async (req, res) => {
     const currentDay = req.body.currentday;
-    const lastDayInfo = await db.query('SELECT MAX(day) FROM workouts WHERE user_id = $1', [req.cookies.user.id]);
+    const lastDayInfo = await db.query('SELECT MAX(day) FROM workouts WHERE user_id = $1', [userId]);
     const lastDay = lastDayInfo.rows.at(0).max;
     console.log(lastDay, currentDay);
-    await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [req.cookies.user.id]);
+    await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [userId]);
     if (currentDay == lastDay) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE day = 0 AND user_id = $1', [req.cookies.user.id]);
+        await db.query('UPDATE workouts SET current = TRUE WHERE day = 0 AND user_id = $1', [userId]);
     } else {
-        const dbInfo = await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2', [req.cookies.user.id, Number(currentDay) + 1]);
+        const dbInfo = await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2', [id, Number(currentDay) + 1]);
     }
     res.redirect('/plan');
 });
 
 router.post('/finish', async (req, res) => {
     const finishDay = req.body.workoutday;
-    const finishNameInfo = await db.query('SELECT DISTINCT name FROM workouts WHERE user_id = $1 AND day = $2', [req.cookies.user.id, finishDay]);
+    const finishNameInfo = await db.query('SELECT DISTINCT name FROM workouts WHERE user_id = $1 AND day = $2', [userId, finishDay]);
     const finishName = finishNameInfo.rows.at(0).name;
-    await db.query('UPDATE users SET last_workout = $1 WHERE id = $2', [finishName, req.cookies.user.id]);
+    await db.query('UPDATE users SET last_workout = $1 WHERE id = $2', [finishName, userId]);
 
     const currentDate = new Date();
     const today = currentDate.toLocaleDateString('en-CA').slice(0, 10);
-    await db.query('UPDATE users SET last_workout_date = $1 WHERE id = $2', [today, req.cookies.user.id]);
-    await db.query('UPDATE users SET workouts_completed = workouts_completed + 1 WHERE id = $1', [req.cookies.user.id]);
+    await db.query('UPDATE users SET last_workout_date = $1 WHERE id = $2', [today, userId]);
+    await db.query('UPDATE users SET workouts_completed = workouts_completed + 1 WHERE id = $1', [userId]);
 
     res.redirect('/plan');
 })

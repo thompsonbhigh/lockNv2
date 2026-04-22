@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
-import { Home, Login } from './pages';
+import { Home, Login, Fitness } from './pages';
 import {BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 function App() {
@@ -30,7 +30,6 @@ function App() {
 
     async function getUserData() {
         try {
-            console.log('User: ', user);
             const response = await fetch(`http://localhost:3000/user-info`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -55,7 +54,6 @@ function App() {
             if (loginInfo.isLoggedIn === true) {
                 setUser(loginInfo.user);
                 setIsLoggedIn(true);
-                navigate('/home', {replace: true});
             } else {
                 setIsLoggedIn(false);
                 navigate('/', {replace: true});
@@ -74,7 +72,7 @@ function App() {
 
     useEffect(() => {
         checkIsLoggedIn();
-    }, []);
+    }, [isLoggedIn]);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -94,6 +92,7 @@ function App() {
                     <Route path='/' element={<HomeTitle />} />
                     <Route path='/home' element={<Home userInfo={userInfo} />} />
                     <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
+                    <Route path='/fitness' element={<Fitness userInfo={userInfo} />} />
                 </Routes>
 
         </main>

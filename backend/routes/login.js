@@ -9,7 +9,7 @@ require('dotenv').config();
 let incorrectLogin = null;
 
 const authJWT = (req, res, next) => {
-    const token = req.session.user.token;
+    const token = req.session?.user?.token;
 
     if (!token) {
         return res.json({ isLoggedIn: false });
@@ -18,7 +18,7 @@ const authJWT = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        return res.json({ isLoggedIn: true, user: req.session.user });
+        next();
     } catch (error) {
         console.error('Failed to authorize: ', error);
         return res.json({ isLoggedIn: false });;
@@ -27,7 +27,6 @@ const authJWT = (req, res, next) => {
 
 router.get('/auth', (req, res) => {
     const token = req.session?.user?.token;
-    console.log('Auth happens here', req.sessionID);
 
     if (!token) {
         return res.json({ isLoggedIn: false });
@@ -36,7 +35,7 @@ router.get('/auth', (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        return res.json({ isLoggedIn: true, user: req.session.user });
+        return res.json({ isLoggedIn: true, user: { id: req.session.user.id, username: req.session.user.username }});
     } catch (error) {
         return res.json({ isLoggedIn: false });;
     }
@@ -80,7 +79,7 @@ router.post('/', async (req, res) => {
         token: token,
     }
 
-    res.json(req.session.user);
+    res.json({ id: req.session.user.id, username: req.session.user.username});
 });
 
 module.exports = {
