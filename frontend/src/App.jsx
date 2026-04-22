@@ -69,12 +69,20 @@ function App() {
             }
         } catch (err) {
             console.error('Failed to get login info: ', err);
+        } finally {
+            setLoading(false);
         }
+    }
+
+    function handleHomeClick() {
+        navigate('/home');
+        checkIsLoggedIn();
     }
 
     useEffect(() => {
         checkIsLoggedIn();
         if (isLoggedIn) {
+            setLoading(true);
             getUserData();
         }
     }, [isLoggedIn]);
@@ -93,7 +101,7 @@ function App() {
     return (
         <main>
             <div class="mainHeader">
-                <img class="logo" src={locknLogo}/>
+                <img class="logo" src={locknLogo} onClick={handleHomeClick}/>
                 <br/>
                 {loginContent}
             </div>

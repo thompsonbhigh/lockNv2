@@ -17,6 +17,30 @@ const Fitness = ({ userInfo }) => {
         }
     }
 
+    async function handleNext() {
+        try {
+            const response = await fetch('http://localhost:3000/fitness/next', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    currentday: workouts.workoutNames.day,
+                }),
+            });
+            const nextDay = await response.json();
+            setWorkouts(prev => ({
+                ...prev,
+                workoutNames: {
+                    name: nextDay.name,
+                    day: nextDay.day
+                }
+            }));
+            console.log('Next day: ', nextDay);
+        } catch (err) {
+            console.error('Failed to get next workout: ', err);
+        }
+    }
+
     useEffect(() => {
         getWorkoutData();
     }, []);
@@ -43,6 +67,11 @@ const Fitness = ({ userInfo }) => {
         return <div className='center'><div className='loader'/></div>
     }
 
+    let congratsMsg;
+    if (workouts.hasWorkedOutToday) {
+        congratsMsg = <p>Good job on working out today!'</p>;
+    }
+
     return (
         <main>
             <h1 class="fitness-name">fitness</h1>
@@ -64,36 +93,27 @@ const Fitness = ({ userInfo }) => {
                         </thead>
                         <thead>
                             <tr>
-                                <th style={{textAlign: 'left', fontSize: 40 + 'px'}}>exercise</th>
-                                <th style={{textAlign: 'left', fontSize: 40 + 'px'}}>sets</th>
-                                <th style={{textAlign: 'left', fontSize: 40 + 'px'}}>reps</th>
+                                <th className="fitness-subheader" style={{width: '30%'}}>exercise</th>
+                                <th className="fitness-subheader" style={{width: '5%'}}>sets</th>
+                                <th className="fitness-subheader" style={{width: '40%'}}>reps</th>
                             </tr>
                         </thead>
                         <tbody>
                             {workoutList}
                         </tbody>
                     </table>
-                    {/* <% if (hasWorkedOutToday) { %>
-                        <p>Good job on working out today!</p>
-                    <% } else {%>
-                        <form action="/plan/finish" method="POST">
-                            <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
-                        </form>
-                    <% } %>
+                        {congratsMsg}
                     <div class="fitness-btns">
-                        <form action="/plan/back" method="POST">
-                            <button type="submit" name="currentday" value="<%= workoutNames.day %>">back</button>
-                        </form>
+                        <button name="currentday" value="<%= workoutNames.day %>">back</button>
                         <form action="/plan/edit" method="POST">
                             <button type="submit" name="editday" value="<%= workoutNames.day %>">edit</button>
                         </form>
+                        <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
                         <form action="/plan/edit" method="POST">
                             <button type="submit">add</button>
                         </form>
-                        <form action="/plan/next" method="POST">
-                            <button type="submit" name="currentday" value="<%= workoutNames.day %>">next</button>
-                        </form>
-                    </div> */}
+                        <button type="submit" name="currentday" value="<%= workoutNames.day %>" onClick={handleNext}>next</button>
+                    </div>
                 </div>
             </div>
         </main>

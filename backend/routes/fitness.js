@@ -41,7 +41,6 @@ router.get('/', auth, async function(req, res){
         month: 'long',
         day: 'numeric'
     });
-    console.log(formattedLastWorkoutDate);
 
     res.json({
         workouts: workouts, 
@@ -49,11 +48,6 @@ router.get('/', auth, async function(req, res){
         hasWorkedOutToday: hasWorkedOutToday, 
         lastWorkoutDate: formattedLastWorkoutDate ? formattedLastWorkoutDate.toString() : null
     });
-});
-
-router.get('/custom', function(req, res){
-    const planType = 'Custom';
-    res.redirect('/plan');
 });
 
 router.post('/', (req, res) => {
@@ -132,17 +126,31 @@ router.post('/back', async (req, res) => {
 });
 
 router.post('/next', async (req, res) => {
+    const username = req.session.user.username;
+    const userId = req.session.user.id;
+
     const currentDay = req.body.currentday;
+
     const lastDayInfo = await db.query('SELECT MAX(day) FROM workouts WHERE user_id = $1', [userId]);
     const lastDay = lastDayInfo.rows.at(0).max;
-    console.log(lastDay, currentDay);
+    
+    let nextDay;
+    let nextDayInfo;
+
     await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [userId]);
+
     if (currentDay == lastDay) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE day = 0 AND user_id = $1', [userId]);
+        nextDayInfo = await db.query('UPDATE workouts SET current = TRUE WHERE day = 0 AND user_id = $1 RETURNING name, day', [userId]);
     } else {
-        const dbInfo = await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2', [id, Number(currentDay) + 1]);
+        nextDayInfo = await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2 RETURNING name, day', [userId, Number(currentDay) + 1]);
     }
-    res.redirect('/plan');
+
+    nextDay = {
+        name: nextDayInfo.rows.at(0).name,
+        day: nextDayInfo.rows.at(0).day
+    }
+    
+    res.json(nextDay);
 });
 
 router.post('/finish', async (req, res) => {

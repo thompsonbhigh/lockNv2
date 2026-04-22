@@ -28,6 +28,7 @@ body::after {
 
 .logo {
     max-width: 10vh;
+    cursor: pointer;
 }
 .mainHeader {
     display: flex;
@@ -186,7 +187,7 @@ div.flex-container {
 .page-grid {
     display: grid;
     grid-template-columns: 30% 70%;
-    height: 70%;
+    grid-template-rows: 65vh;
 }
 
 .page-grid p {
@@ -324,6 +325,11 @@ div.flex-container {
     padding: 10px;
     font-weight: 200;
     text-align: center;
+}
+
+.plan-container .fitness-subheader {
+    text-align: left;
+    font-size: 40px;
 }
 
 .plan-container td {
