@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
 import { Home, Login, Fitness } from './pages';
-import {BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     function HomeTitle() {
         return (
@@ -43,6 +45,8 @@ function App() {
             setUserInfo(userData);
         } catch (err) {
             console.error('Failed to get user data: ', err);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -54,6 +58,11 @@ function App() {
             if (loginInfo.isLoggedIn === true) {
                 setUser(loginInfo.user);
                 setIsLoggedIn(true);
+
+                if (location.pathname === '/') {
+                    navigate('/home', {replace: true});
+                }
+
             } else {
                 setIsLoggedIn(false);
                 navigate('/', {replace: true});
@@ -63,6 +72,13 @@ function App() {
         }
     }
 
+    useEffect(() => {
+        checkIsLoggedIn();
+        if (isLoggedIn) {
+            getUserData();
+        }
+    }, [isLoggedIn]);
+
     let loginContent;
     if (!isLoggedIn) {
         loginContent = <Link to='/login' class="login">login</Link>
@@ -70,15 +86,9 @@ function App() {
         loginContent = <Link to='/' class="login" onClick={handleLogout}>logout</Link>
     }
 
-    useEffect(() => {
-        checkIsLoggedIn();
-    }, [isLoggedIn]);
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            getUserData();
-        }
-    }, [isLoggedIn]);
+    if (loading) {
+        return <div className='center'><div className='loader'/></div>
+    }
 
     return (
         <main>

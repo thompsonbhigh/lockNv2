@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const Fitness = ({ userInfo }) => {
     const [workouts, setWorkouts] = useState({});
+    const [loading, setLoading] = useState(true);
 
     async function getWorkoutData() {
         try {
@@ -11,8 +12,18 @@ const Fitness = ({ userInfo }) => {
             setWorkouts(workoutData);
         } catch (err) {
             console.error('Failed to get workout data: ', err);
+        } finally {
+            setLoading(false);
         }
     }
+
+    useEffect(() => {
+        getWorkoutData();
+    }, []);
+
+    useEffect(() => {
+        console.log('Workout data updated: ', workouts);
+    }, [workouts]);
 
     const workoutName = typeof workouts?.workoutNames?.name === 'string' ? workouts.workoutNames.name : '';
 
@@ -28,13 +39,9 @@ const Fitness = ({ userInfo }) => {
         </tr>
     )
 
-    useEffect(() => {
-        getWorkoutData();
-    }, []);
-
-    useEffect(() => {
-        console.log('Workout data updated: ', workouts);
-    }, [workouts]);
+    if (loading) {
+        return <div className='center'><div className='loader'/></div>
+    }
 
     return (
         <main>
