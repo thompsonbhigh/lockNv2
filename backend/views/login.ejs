@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles/style1.css" type="text/css">
+    </head>
+
+    <header>
+        <%- include ('partials/header') %>
+    </header>
+
+    <body>
+        <div class="login-container">
+            <h2>Login to Your Account</h2>
+            <% if (incorrectLogin) { %>
+                <p><%= incorrectLogin %></p>
+            <% } %>
+            <form action="/login" method="POST">
+                <div>
+                    <input type="text" size="20%" placeholder="Username" name="uname" required>
+                </div>
+
+                <div>
+                    <input type="password" size="20%" placeholder="Password"  name="psw" required>
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
+            <a href="../createAccount">Create Account</a>
+        </div>
+    </body>
+</html>

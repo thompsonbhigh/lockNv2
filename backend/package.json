@@ -1,0 +1,40 @@
+{
+  "name": "lockn",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/thompsonhigh/lockN#readme",
+  "bugs": {
+    "url": "https://github.com/thompsonhigh/lockN/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thompsonhigh/lockN.git"
+  },
+  "license": "ISC",
+  "author": "Thompson High",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemon": "^3.1.11",
+    "openai": "^6.32.0",
+    "path": "^0.12.7",
+    "pbkdf2-password": "^1.2.1",
+    "pg": "^8.16.3",
+    "pg-promise": "^12.3.0",
+    "postgres": "^3.4.8",
+    "zod": "^4.3.6"
+  }
+}

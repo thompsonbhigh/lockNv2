@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style1.css" type="text/css">
+    <title>Goals</title>
+</head>
+
+<header>
+    <%- include ('partials/header.ejs') %>
+</header>
+
+<body>
+    <h1 class="fitness-name">goals</h1>
+    <div class="page-grid">
+
+        <div>
+            <p>rank: <span><%= userGoalRank %></span></p>
+            <p>goals completed: <span><%= userGoalCompleted %></span></p>
+            <p>week: <span><%= goalsWeek %></span></p>
+            <p>month: <span><%= goalsMonth %></span></p>
+            <p>year: <span><%= goalsYear %></span></p>
+        </div>
+
+        <div class="plan-container" id="goal-plan-container">
+            <div class="goal-btns">
+                <button id="week-btn" onclick="showWeekly()">Week</button>
+                <button id="month-btn" onclick="showMonthly()" style="color: #495057;">Month</button>
+                <button id="year-btn" onclick="showYearly()" style="color: #495057;">Year</button>
+            </div>
+
+            <div id="weekly-goals">
+            <table>
+                <tbody>
+                    <% goals.forEach(goal => { %>
+                        <% if (!goal.status && goal.type == 'weekly') { %>
+                            <tr>
+                                <td style="text-align: center; width: 3vh;">
+                                    <form action="/goals/complete" method="POST">
+                                        <button type="submit" name="goalid" value="<%= goal.id %>">✓</button>
+                                    </form>
+                                </td>
+                                <td><%= goal.goal %></td>
+                                <td style="text-align: right;">
+                                    <form action="/goals/delete" method="POST">
+                                        <input type="hidden" name="goalid" value="<%=goal.id%>">
+                                        <button type="submit">−</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% }); %>
+                    <tr>
+                        <td colspan="3">
+                            <form class="task-form" action="/goals/add" method="POST">
+                                <div>
+                                    <input type="text" placeholder="enter a goal" name="goal" required>
+                                    <input type="hidden" name="goaltype" value="weekly">
+                                </div>
+                                <div>
+                                    <button type="submit">+</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <% if (isEmpty.weekly) { %>
+                <p>You haven't added any goals yet!</p>
+            <% } else if (!incompleteWeeklyGoals) { %>
+                <p>You've completed all your weekly goals!</p>
+            <% } %>
+            </div>
+
+            <div id="monthly-goals" style="display: none;">
+            <table>
+                <tbody>
+                    <% goals.forEach(goal => { %>
+                        <% if (!goal.status && goal.type == 'monthly') { %>
+                            <tr>
+                                <td style="width: 3vh;">
+                                    <form action="/goals/complete" method="POST">
+                                        <button type="submit" name="goalid" value="<%= goal.id %>">✓</button>
+                                    </form>
+                                </td>
+                                <td><%= goal.goal %></td>
+                                <td style="width: 3vh;">
+                                    <form action="/goals/delete" method="POST">
+                                        <input type="hidden" name="goalid" value="<%=goal.id%>">
+                                        <button type="submit">−</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% }); %>
+                    <tr>
+                        <td colspan="3">
+                            <form class="task-form" action="/goals/add" method="POST">
+                                <div>
+                                    <input type="text" placeholder="enter a goal" name="goal" required>
+                                    <input type="hidden" name="goaltype" value="monthly">
+                                </div>
+                                <div>
+                                    <button type="submit">+</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <% if (isEmpty.monthly) { %>
+                <p>You haven't added any goals yet!</p>
+            <% } else if (!incompleteMonthlyGoals) { %>
+                <p>You've completed all your monthly goals!</p>
+            <% } %>
+            </div>
+
+            <div id="yearly-goals" style="display: none;">
+            <table>
+                <tbody>
+                    <% goals.forEach(goal => { %>
+                        <% if (!goal.status && goal.type == 'yearly') { %>
+                            <tr>
+                                <td style="text-align: right; width: 3vh;">
+                                    <form action="/goals/complete" method="POST">
+                                        <button type="submit" name="goalid" value="<%= goal.id %>">✓</button>
+                                    </form>
+                                </td>
+                                <td><%= goal.goal %></td>
+                                <td style="width: 3vh;">
+                                    <form action="/goals/delete" method="POST">
+                                        <input type="hidden" name="goalid" value="<%=goal.id%>">
+                                        <button type="submit">−</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% }); %>
+                    <tr>
+                        <td colspan="3">
+                            <form class="task-form" action="/goals/add" method="POST">
+                                <div>
+                                    <input type="text" placeholder="enter a goal" name="goal" required>
+                                    <input type="hidden" name="goaltype" value="yearly">
+                                </div>
+                                <div>
+                                    <button type="submit">+</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <% if (isEmpty.yearly) { %>
+                <p>You haven't added any goals yet!</p>
+            <% } else if (!incompleteYearlyGoals) { %>
+                <p>You've completed all your yearly goals!</p>
+            <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function showWeekly() {
+        const monthDiv = document.getElementById('monthly-goals');
+        const weekDiv = document.getElementById('weekly-goals');
+        const yearDiv = document.getElementById('yearly-goals');
+
+        const monthBtn = document.getElementById('month-btn');
+        const weekBtn = document.getElementById('week-btn');
+        const yearBtn = document.getElementById('year-btn');
+
+        monthBtn.style.color = '#495057';
+        yearBtn.style.color = '#495057';
+        weekBtn.style.color = '#F8F9FA';
+
+        monthDiv.style.display = 'none';
+        yearDiv.style.display = 'none';
+        weekDiv.style.display = 'block';
+    }
+
+    function showMonthly() {
+        const monthDiv = document.getElementById('monthly-goals');
+        const weekDiv = document.getElementById('weekly-goals');
+        const yearDiv = document.getElementById('yearly-goals');
+
+        const monthBtn = document.getElementById('month-btn');
+        const weekBtn = document.getElementById('week-btn');
+        const yearBtn = document.getElementById('year-btn');
+
+        weekBtn.style.color = '#495057';
+        yearBtn.style.color = '#495057';
+        monthBtn.style.color = '#F8F9FA';
+
+        weekDiv.style.display = 'none';
+        yearDiv.style.display = 'none';
+        monthDiv.style.display = 'block';
+    }
+
+    function showYearly() {
+        const monthDiv = document.getElementById('monthly-goals');
+        const weekDiv = document.getElementById('weekly-goals');
+        const yearDiv = document.getElementById('yearly-goals');
+
+        const monthBtn = document.getElementById('month-btn');
+        const weekBtn = document.getElementById('week-btn');
+        const yearBtn = document.getElementById('year-btn');
+
+        weekBtn.style.color = '#495057';
+        monthBtn.style.color = '#495057';
+        yearBtn.style.color = '#F8F9FA';
+
+        weekDiv.style.display = 'none';
+        monthDiv.style.display = 'none';
+        yearDiv.style.display = 'block';
+    }
+</script>
+</html>

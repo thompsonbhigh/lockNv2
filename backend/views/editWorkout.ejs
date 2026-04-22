@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/style1.css" type="text/css">
+    <title>Plan</title>
+</head>
+
+<header>
+        <%- include ('partials/header') %>
+</header>
+
+<body>
+    <div class="edit-container">
+        <table>
+            <thead>
+                <th colspan="2">
+                    <form id="confirmForm" action="/plan/confirm" method="POST">
+                        <input type="text" placeholder="Enter workout name" name="workoutname" value="<%= workouts.at(0)?.workout_name %>" required>
+                    </form>
+                </th>
+            </thead>
+
+            <% workouts.forEach(workout => { %>
+                <% if (workout.day == day) { %>
+                    <tr>
+                        <td>
+                            <%= workout.name %>
+                        </td>
+                        <td style="text-align: right;">
+                            <form action="/plan/delete" method="POST">
+                                <input type="hidden" name="workoutId" value="<%=workout.id%>">
+                                <button type="submit">−</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% } %>
+            <% }) %>
+
+            <tr>
+                <td>
+                    <form action="/plan/clear" method="POST">
+                        <button style="font-weight: 100;" type="submit" name="clearday" value="<%= day %>">CLEAR</button>
+                    </form>
+                </td>
+                <td style="text-align: right;">
+                    <form action="/plan" method="POST">
+                        <button type="submit" name="day" value="<%= day %>">+</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <div class="button-flex">
+            <form action="/plan/cancel" method="POST">
+                <button class="cancel-btn" type="submit">CANCEL</button>
+            </form>
+            <button form="confirmForm" class="confirm-workout" type="submit">CONFIRM</button>
+        </div>
+    </div>
+</body>
+</html>

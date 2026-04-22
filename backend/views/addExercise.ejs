@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/style1.css" type="text/css">
+    <script src="addExercise.js" defer></script>
+    <title>Add</title>
+</head>
+
+<header>
+        <%- include ('partials/header') %>
+</header>
+
+<body>
+    <div class="add-container">
+        <table>
+            <thead>
+                <th colspan="3">
+                    <form action="../addExercise/search" method="GET">
+                        <input type="text" name="query" placeholder="Search...">
+                    </form>
+                </th>
+            </thead>
+
+            <tbody>
+                <% exercises.forEach(exercise => { %>
+                <tr>
+                    <td style="width: 65%;"><%= exercise.name %></td>
+                    <td class="hide-on-mobile"><%= exercise.muscle %></td>
+                    <td>
+                        <form action="/addExercise" method="POST">
+                            <button type="submit" class="add-btn" name="<%= exercise.id %>">+</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
