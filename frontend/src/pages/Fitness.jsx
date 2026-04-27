@@ -1,9 +1,13 @@
 import { use } from "react";
 import { useEffect, useState } from "react";
+import Popup from "../components/Popup";
+import Edit from './Edit';
 
 const Fitness = ({ userInfo }) => {
     const [workouts, setWorkouts] = useState({});
     const [loading, setLoading] = useState(true);
+    const [popup, setPopup] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     async function getWorkoutData() {
         try {
@@ -41,9 +45,33 @@ const Fitness = ({ userInfo }) => {
         }
     }
 
+    async function handleBack() {
+        try {
+            const response = await fetch('http://localhost:3000/fitness/back', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    currentday: workouts.workoutNames.day,
+                }),
+            });
+            const prevDay = await response.json();
+            setWorkouts(prev => ({
+                ...prev,
+                workoutNames: {
+                    name: prevDay.name,
+                    day: prevDay.day
+                }
+            }));
+            console.log('Prev day: ', prevDay);
+        } catch (err) {
+            console.error('Failed to get next workout: ', err);
+        }
+    }
+
     useEffect(() => {
         getWorkoutData();
-    }, []);
+    }, [deleting]);
 
     useEffect(() => {
         console.log('Workout data updated: ', workouts);
@@ -74,6 +102,9 @@ const Fitness = ({ userInfo }) => {
 
     return (
         <main>
+            <Popup trigger={popup} setTrigger={setPopup} >
+                <Edit workouts={workouts} filteredWorkoutList={filteredWorkoutList} setDeleting={setDeleting} />
+            </Popup>
             <h1 class="fitness-name">fitness</h1>
             <div class="page-grid">
                 <div>
@@ -104,14 +135,14 @@ const Fitness = ({ userInfo }) => {
                     </table>
                         {congratsMsg}
                     <div class="fitness-btns">
-                        <button name="currentday" value="<%= workoutNames.day %>">back</button>
-                        <form action="/plan/edit" method="POST">
-                            <button type="submit" name="editday" value="<%= workoutNames.day %>">edit</button>
-                        </form>
+                        <button name="currentday" value="<%= workoutNames.day %>" onClick={handleBack}>back</button>
+
+                        <button type="submit" name="editday" onClick={() => setPopup(true)}>edit</button>
+
                         <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
-                        <form action="/plan/edit" method="POST">
-                            <button type="submit">add</button>
-                        </form>
+
+                        <button type="submit">add</button>
+
                         <button type="submit" name="currentday" value="<%= workoutNames.day %>" onClick={handleNext}>next</button>
                     </div>
                 </div>

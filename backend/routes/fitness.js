@@ -23,17 +23,34 @@ router.get('/', auth, async function(req, res){
     const getCurrentInfo = await db.query('SELECT current FROM workouts WHERE user_id = $1 AND current = TRUE', [userId]);
     const currentInfo = getCurrentInfo.rows.at(0);
     if (!currentInfo) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = 0', [userId]);
+        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = (select min(day) from workouts where user_id = 1$)', [userId]);
     }
 
     const workoutNamesInfo = await db.query('SELECT DISTINCT name, day FROM workouts WHERE user_id = $1 AND current = TRUE ORDER BY day ASC', [userId]);
     const workoutNames = workoutNamesInfo.rows.at(0);
+    console.log(workoutNamesInfo);
     const {rows} = await db.query('SELECT exercises.name AS exercise_name, workouts.id, workouts.day, workouts.name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 ORDER BY index ASC',
          [userId]);
     workouts = rows;
 
     if (!workoutNames) {
-        res.redirect('plan/edit');
+        // res.redirect('plan/edit');
+    }
+
+    const daysInfo = await db.query('SELECT DISTINCT day FROM workouts WHERE user_id = $1 ORDER BY day', [userId]);
+    const dayIndexes = daysInfo.rows;
+    let i = 0;
+    let incorrectIndex = null;
+    dayIndexes.some(day => {
+        if (day.day != i) {
+            incorrectIndex = i;
+            return true;
+        }
+        i++;
+    });
+
+    if (incorrectIndex != null) {
+        await db.query('UPDATE workouts SET day = day - 1 WHERE user_id = $1 AND day >= $2', [userId, incorrectIndex]);
     }
 
     const formattedLastWorkoutDate = lastWorkoutDate.toLocaleDateString('en-US', {
@@ -42,7 +59,7 @@ router.get('/', auth, async function(req, res){
         day: 'numeric'
     });
 
-    res.json({
+    return res.json({
         workouts: workouts, 
         workoutNames: workoutNames, 
         hasWorkedOutToday: hasWorkedOutToday, 
@@ -56,11 +73,14 @@ router.post('/', (req, res) => {
 });
 
 router.post('/delete', async (req,res) => {
-    const { workoutId } = req.body;
+    console.log(req.body);
+    const userId = req.session.user.id;
+    const workoutId = req.body.workoutId;
+
     const deletedIndexInfo = await db.query('DELETE FROM workouts WHERE id = $1 AND user_id = $2 RETURNING index, day', [workoutId, userId]);
     const deletedIndex = deletedIndexInfo.rows.at(0).index;
+
     await db.query('UPDATE workouts SET index = index - 1 WHERE user_id = $1 AND index > $2 AND day = $3', [userId, deletedIndex, deletedIndexInfo.rows.at(0).day]);
-    res.redirect('/plan/edit');
 });
 
 router.get('/edit', async (req, res) => {
@@ -115,20 +135,33 @@ router.post('/clear', async (req, res) => {
 });
 
 router.post('/back', async (req, res) => {
+    const userId = req.session.user.id;
     const currentDay = req.body.currentday;
+
     await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [userId]);
-    if (currentDay == 0) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE day = (SELECT MAX(day) FROM workouts where user_id = $1) AND user_id = $1', [userId]);
+    
+    const leastDayInfo = await db.query('SELECT MIN(day) FROM workouts WHERE user_id = $1', [userId]);
+    const leastDay = leastDayInfo.rows.at(0).min;
+
+    let prevDay;
+    let prevDayInfo;
+
+    if (currentDay == leastDay) {
+        prevDayInfo = await db.query('UPDATE workouts SET current = TRUE WHERE day = (SELECT MAX(day) FROM workouts where user_id = $1) AND user_id = $1 RETURNING name, day', [userId]);
     } else {
-        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2', [userId, currentDay - 1]);
+        prevDayInfo = await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = $2 RETURNING name, day', [userId, currentDay - 1]);
     }
-    res.redirect('/plan');
+
+    prevDay = {
+        name: prevDayInfo.rows.at(0).name,
+        day: prevDayInfo.rows.at(0).day
+    }
+
+    res.json(prevDay);
 });
 
 router.post('/next', async (req, res) => {
-    const username = req.session.user.username;
     const userId = req.session.user.id;
-
     const currentDay = req.body.currentday;
 
     const lastDayInfo = await db.query('SELECT MAX(day) FROM workouts WHERE user_id = $1', [userId]);
