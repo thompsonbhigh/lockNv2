@@ -9,6 +9,7 @@ const Fitness = ({ userInfo }) => {
     const [popup, setPopup] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [adding, setAdding] = useState(false);
+    const [confirming, setConfirming] = useState(false);
 
     async function getWorkoutData() {
         try {
@@ -72,7 +73,7 @@ const Fitness = ({ userInfo }) => {
 
     useEffect(() => {
         getWorkoutData();
-    }, [deleting, adding]);
+    }, [deleting, adding, confirming]);
 
     useEffect(() => {
         console.log('Workout data updated: ', workouts);
@@ -114,6 +115,7 @@ const Fitness = ({ userInfo }) => {
                 currWorkoutDay={workoutDay} 
                 setTrigger={setPopup} 
                 setAdding={setAdding}
+                setConfirming={setConfirming}
                 />
                 } 
             />

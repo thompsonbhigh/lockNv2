@@ -2,11 +2,12 @@ import { useState } from 'react'
 import Add from './Add';
 import Popup from '../components/Popup';
 
-const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding }) => {
+const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding, setConfirming }) => {
     const [workoutName, setWorkoutName] = useState(currWorkoutName);
     const [addPopup, setAddPopup] = useState(false);
 
     async function handleConfirm() {
+        setConfirming(true);
         try {
             console.log('Starting confirm');
             const response = await fetch('http://localhost:3000/fitness/confirm', {
@@ -22,6 +23,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
         } catch (err) {
             console.error('Failed to confirm edit: ', err);
         } finally {
+            setConfirming(false)
             setTrigger(false);
         }
     };
