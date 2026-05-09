@@ -23,12 +23,11 @@ router.get('/', auth, async function(req, res){
     const getCurrentInfo = await db.query('SELECT current FROM workouts WHERE user_id = $1 AND current = TRUE', [userId]);
     const currentInfo = getCurrentInfo.rows.at(0);
     if (!currentInfo) {
-        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = (select min(day) from workouts where user_id = 1$)', [userId]);
+        await db.query('UPDATE workouts SET current = TRUE WHERE user_id = $1 AND day = (select min(day) from workouts where user_id = $1)', [userId]);
     }
 
     const workoutNamesInfo = await db.query('SELECT DISTINCT name, day FROM workouts WHERE user_id = $1 AND current = TRUE ORDER BY day ASC', [userId]);
     const workoutNames = workoutNamesInfo.rows.at(0);
-    console.log(workoutNamesInfo);
     const {rows} = await db.query('SELECT exercises.name AS exercise_name, workouts.id, workouts.day, workouts.name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 ORDER BY index ASC',
          [userId]);
     workouts = rows;
@@ -73,7 +72,6 @@ router.post('/', (req, res) => {
 });
 
 router.post('/delete', async (req,res) => {
-    console.log(req.body);
     const userId = req.session.user.id;
     const workoutId = req.body.workoutId;
 
@@ -113,15 +111,17 @@ router.post('/edit', async (req, res) => {
         'SELECT exercises.name, workouts.day, workouts.id, workouts.name AS workout_name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 AND day = $2 ORDER BY index ASC',
          [id, currDay]);
     const newWorkouts = newWorkoutsInfo.rows;
-    res.render('editWorkout', {workouts: newWorkouts, day: currDay});
 });
 
 router.post('/confirm', async (req, res) => {
+    const userId = req.session.user.id;
     isEditing = false;
     const name = req.body.workoutname;
+    const currDay = req.body.currDay;
+
     await db.query('UPDATE workouts SET current = FALSE WHERE user_id = $1', [userId]);
     await db.query('UPDATE workouts SET name = $1, current = TRUE WHERE user_id = $2 AND day = $3', [name, userId, currDay]);
-    res.redirect('/plan');
+    res.json({msg: 'ok'});
 });
 
 router.post('/cancel', async (req, res) => {

@@ -102,9 +102,10 @@ const Fitness = ({ userInfo }) => {
 
     return (
         <main>
-            <Popup trigger={popup} setTrigger={setPopup} >
-                <Edit workouts={workouts} filteredWorkoutList={filteredWorkoutList} setDeleting={setDeleting} />
-            </Popup>
+            <Popup trigger={popup} setTrigger={setPopup} children={
+                <Edit workouts={workouts} filteredWorkoutList={filteredWorkoutList} setDeleting={setDeleting} currWorkoutName={workoutName} setTrigger={setPopup} />
+                } 
+            />
             <h1 class="fitness-name">fitness</h1>
             <div class="page-grid">
                 <div>
@@ -137,7 +138,7 @@ const Fitness = ({ userInfo }) => {
                     <div class="fitness-btns">
                         <button name="currentday" value="<%= workoutNames.day %>" onClick={handleBack}>back</button>
 
-                        <button type="submit" name="editday" onClick={() => setPopup(true)}>edit</button>
+                        <button name="editday" onClick={() => setPopup(true)}>edit</button>
 
                         <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
 

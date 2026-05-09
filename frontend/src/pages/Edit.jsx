@@ -1,6 +1,27 @@
-import React from 'react'
+import { useState } from 'react'
 
-const Edit = ({ workouts, filteredWorkoutList, setDeleting }) => {
+const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger }) => {
+    const [workoutName, setWorkoutName] = useState(currWorkoutName);
+
+    async function handleConfirm() {
+        try {
+            console.log('Starting confirm');
+            const response = await fetch('http://localhost:3000/fitness/confirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    workoutname: workoutName,
+                    currDay: filteredWorkoutList?.at(0)?.day
+                }),
+            });
+            console.log('Worked');
+        } catch (err) {
+            console.error('Failed to confirm edit: ', err);
+        } finally {
+            setTrigger(false);
+        }
+    };
 
     async function handleDelete(id) {
         try {
@@ -38,9 +59,8 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting }) => {
                     <thead>
                         <tr>
                             <th colSpan="2">
-                                <form id="confirmForm" action="/plan/confirm" method="POST">
-                                    <input type="text" placeholder="Enter workout name" name="workoutname" defaultValue={ workouts.workoutNames.name } required />
-                                </form>
+                                <input type="text" placeholder="Enter workout name" name="workoutname" defaultValue={ workouts.workoutNames.name } required 
+                                    onChange={e => setWorkoutName(e.target.value)}/>
                             </th>
                         </tr>
                     </thead>
@@ -62,10 +82,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting }) => {
                     </tbody>
                 </table>
                 <div class="button-flex">
-                    <form action="/plan/cancel" method="POST">
-                        <button class="cancel-btn" type="submit">CANCEL</button>
-                    </form>
-                    <button form="confirmForm" class="confirm-workout" type="submit">CONFIRM</button>
+                    <button onClick={handleConfirm}>CONFIRM</button>
                 </div>
             </div>
         </section>
