@@ -58,6 +58,8 @@ router.get('/', auth, async function(req, res){
         day: 'numeric'
     });
 
+    req.session.day = workoutNames.day;
+
     return res.json({
         workouts: workouts, 
         workoutNames: workoutNames, 
@@ -76,6 +78,7 @@ router.post('/delete', async (req,res) => {
     const workoutId = req.body.workoutId;
 
     const deletedIndexInfo = await db.query('DELETE FROM workouts WHERE id = $1 AND user_id = $2 RETURNING index, day', [workoutId, userId]);
+    console.log(deletedIndexInfo);
     const deletedIndex = deletedIndexInfo.rows.at(0).index;
 
     await db.query('UPDATE workouts SET index = index - 1 WHERE user_id = $1 AND index > $2 AND day = $3', [userId, deletedIndex, deletedIndexInfo.rows.at(0).day]);

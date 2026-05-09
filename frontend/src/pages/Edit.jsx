@@ -1,7 +1,10 @@
 import { useState } from 'react'
+import Add from './Add';
+import Popup from '../components/Popup';
 
-const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger }) => {
+const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding }) => {
     const [workoutName, setWorkoutName] = useState(currWorkoutName);
+    const [addPopup, setAddPopup] = useState(false);
 
     async function handleConfirm() {
         try {
@@ -54,6 +57,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
 
     return (
         <section>
+            <Popup trigger={addPopup} setTrigger={setAddPopup} children={<Add currWorkoutDay={currWorkoutDay} setAdding={setAdding} setTrigger={setAddPopup} />} />
             <div class="edit-container">
                 <table>
                     <thead>
@@ -74,9 +78,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
                                 </form>
                             </td>
                             <td style={{textAlign: 'right'}}>
-                                <form action="/plan" method="POST">
-                                    <button type="submit" name="day" value="<%= day %>">+</button>
-                                </form>
+                                <button name="day" onClick={() => setAddPopup(true)}>+</button>
                             </td>
                         </tr>
                     </tbody>

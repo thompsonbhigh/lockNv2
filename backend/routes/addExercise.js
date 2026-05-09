@@ -2,12 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-let index;
-
 router.get('/', async function(req, res){
     const { rows } = await db.query('SELECT * FROM exercises ORDER BY muscle ASC');
     const exercises = { exercises: rows };
-    res.render('addExercise', exercises);
+    res.json(exercises);
 });
 
 router.get('/search', async (req, res) => {
@@ -18,18 +16,22 @@ router.get('/search', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const exerciseId = Object.keys(req.body)[0];
-    const userId = req.cookies.user.id;
+    console.log(req.session);
+
+    let index;
+    const exerciseId = req.body.exerciseId;
+    const userId = req.session.user.id;
     const day = req.session.day || 0;
+
     const indexInfo = await db.query('SELECT index FROM workouts WHERE user_id = $1 AND day = $2 ORDER BY index DESC LIMIT 1', [userId, day]);
     if (!indexInfo.rows.at(0)) {
         index = 0;
     } else {
         index = indexInfo.rows.at(0).index + 1;
     }
-    console.log(index, indexInfo);
+
     await db.query('INSERT INTO workouts (user_id, exercise_id, day, index) VALUES ($1, $2, $3, $4)', [userId, exerciseId, day, index]);
-    res.redirect('../plan/edit');
+    res.json({msg: 'ok'});
 });
 
 module.exports = router;

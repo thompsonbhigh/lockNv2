@@ -8,6 +8,7 @@ const Fitness = ({ userInfo }) => {
     const [loading, setLoading] = useState(true);
     const [popup, setPopup] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [adding, setAdding] = useState(false);
 
     async function getWorkoutData() {
         try {
@@ -71,18 +72,20 @@ const Fitness = ({ userInfo }) => {
 
     useEffect(() => {
         getWorkoutData();
-    }, [deleting]);
+    }, [deleting, adding]);
 
     useEffect(() => {
         console.log('Workout data updated: ', workouts);
     }, [workouts]);
+
+    const workoutDay = typeof workouts?.workoutNames?.day === 'number' ? workouts.workoutNames.day : 0;
 
     const workoutName = typeof workouts?.workoutNames?.name === 'string' ? workouts.workoutNames.name : '';
 
     const workoutArray = Array.isArray(workouts.workouts) ? workouts.workouts : [];
 
     const filteredWorkoutList = workoutArray.filter(workout => 
-        workout.name === workoutName
+        workout.day === workoutDay
     );
 
     const workoutList = filteredWorkoutList.map(workout => 
@@ -103,7 +106,15 @@ const Fitness = ({ userInfo }) => {
     return (
         <main>
             <Popup trigger={popup} setTrigger={setPopup} children={
-                <Edit workouts={workouts} filteredWorkoutList={filteredWorkoutList} setDeleting={setDeleting} currWorkoutName={workoutName} setTrigger={setPopup} />
+                <Edit 
+                workouts={workouts} 
+                filteredWorkoutList={filteredWorkoutList} 
+                setDeleting={setDeleting} 
+                currWorkoutName={workoutName} 
+                currWorkoutDay={workoutDay} 
+                setTrigger={setPopup} 
+                setAdding={setAdding}
+                />
                 } 
             />
             <h1 class="fitness-name">fitness</h1>
