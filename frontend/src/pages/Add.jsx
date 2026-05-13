@@ -5,8 +5,6 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
     const [exercises, setExercises] = useState({});
     const [loading, setLoading] = useState(false);
 
-    console.log('Adding to: ', currWorkoutDay);
-
     async function getExercises() {
         setLoading(true);
         try {

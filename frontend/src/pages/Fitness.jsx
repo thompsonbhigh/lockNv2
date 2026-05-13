@@ -12,6 +12,8 @@ const Fitness = ({ userInfo }) => {
     const [confirming, setConfirming] = useState(false);
     const [clearing, setClearing] = useState(false);
     const [newWorkout, setNewWorkout] = useState();
+    const [isEditing, setIsEditing] = useState();
+    const [editDay, setEditDay] = useState();
 
     async function getWorkoutData() {
         try {
@@ -81,14 +83,14 @@ const Fitness = ({ userInfo }) => {
 
     let workoutName = typeof workouts?.workoutNames?.name === 'string' ? workouts.workoutNames.name : '';
 
-    console.log(newWorkout);
-
     if (newWorkout) {
         workoutDay = workoutDay + 1 ? workoutDay + 1 : 0;
         workoutName = '';
     }
-
-    console.log('workoutDay: ', workoutDay, 'workoutName: ', workoutName);
+    
+    if (isEditing) {
+        workoutDay = editDay;
+    }
 
     const workoutArray = Array.isArray(workouts.workouts) ? workouts.workouts : [];
 
@@ -101,8 +103,6 @@ const Fitness = ({ userInfo }) => {
             <td>{workout.exercise_name}</td>
         </tr>
     )
-
-    console.log(workoutList);
 
     if (loading) {
         return <div className='center'><div className='loader'/></div>
@@ -128,6 +128,7 @@ const Fitness = ({ userInfo }) => {
                 setClearing={setClearing}
                 newWorkout={newWorkout}
                 setNewWorkout={setNewWorkout}
+                setIsEditing={setIsEditing}
                 />
                 } 
             />
@@ -163,7 +164,7 @@ const Fitness = ({ userInfo }) => {
                     <div class="fitness-btns">
                         <button name="currentday" value="<%= workoutNames.day %>" onClick={handleBack}>back</button>
 
-                        <button name="editday" onClick={() => setPopup(true)}>edit</button>
+                        <button name="editday" onClick={() => { setPopup(true); setIsEditing(true); setEditDay(workoutDay) }}>edit</button>
 
                         <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
 

@@ -2,11 +2,9 @@ import { useState } from 'react'
 import Add from './Add';
 import Popup from '../components/Popup';
 
-const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding, setConfirming, setClearing, newWorkout, setNewWorkout }) => {
+const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding, setConfirming, setClearing, newWorkout, setNewWorkout, setIsEditing }) => {
     const [workoutName, setWorkoutName] = useState(currWorkoutName);
     const [addPopup, setAddPopup] = useState(false);
-
-    console.log('Day: ', currWorkoutDay, 'Name: ', workoutName);
 
     async function handleConfirm() {
         setConfirming(true);
@@ -23,6 +21,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
         } catch (err) {
             console.error('Failed to confirm edit: ', err);
         } finally {
+            setIsEditing(false);
             setNewWorkout(false);
             setConfirming(false);
             setTrigger(false);
