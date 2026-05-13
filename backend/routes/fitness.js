@@ -28,7 +28,8 @@ router.get('/', auth, async function(req, res){
 
     const workoutNamesInfo = await db.query('SELECT DISTINCT name, day FROM workouts WHERE user_id = $1 AND current = TRUE ORDER BY day ASC', [userId]);
     const workoutNames = workoutNamesInfo.rows.at(0);
-    const {rows} = await db.query('SELECT exercises.name AS exercise_name, workouts.id, workouts.day, workouts.name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 ORDER BY index ASC',
+    const {rows} = await db.query(
+        'SELECT exercises.name AS exercise_name, workouts.id, workouts.day, workouts.name FROM workouts JOIN exercises ON workouts.exercise_id = exercises.id WHERE user_id = $1 ORDER BY index ASC',
          [userId]);
     workouts = rows;
 
@@ -58,8 +59,6 @@ router.get('/', auth, async function(req, res){
         day: 'numeric'
     });
 
-    req.session.day = workoutNames.day;
-
     return res.json({
         workouts: workouts, 
         workoutNames: workoutNames, 
@@ -82,6 +81,7 @@ router.post('/delete', async (req,res) => {
     const deletedIndex = deletedIndexInfo.rows.at(0).index;
 
     await db.query('UPDATE workouts SET index = index - 1 WHERE user_id = $1 AND index > $2 AND day = $3', [userId, deletedIndex, deletedIndexInfo.rows.at(0).day]);
+    res.json({ msg: 'ok' });
 });
 
 router.get('/edit', async (req, res) => {
@@ -133,8 +133,11 @@ router.post('/cancel', async (req, res) => {
 });
 
 router.post('/clear', async (req, res) => {
-    await db.query('DELETE FROM workouts WHERE user_id = $1 AND day = $2', [userId, req.body.clearday]);
-    res.redirect('/plan/edit');
+    const userId = req.session.user.id;
+    const clearDay = req.body.clearDay;
+
+    await db.query('DELETE FROM workouts WHERE user_id = $1 AND day = $2', [userId, clearDay]);
+    res.json({ msg: 'cleared'});
 });
 
 router.post('/back', async (req, res) => {

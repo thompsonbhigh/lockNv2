@@ -2,28 +2,29 @@ import { useState } from 'react'
 import Add from './Add';
 import Popup from '../components/Popup';
 
-const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding, setConfirming }) => {
+const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, setTrigger, currWorkoutDay, setAdding, setConfirming, setClearing, newWorkout, setNewWorkout }) => {
     const [workoutName, setWorkoutName] = useState(currWorkoutName);
     const [addPopup, setAddPopup] = useState(false);
+
+    console.log('Day: ', currWorkoutDay, 'Name: ', workoutName);
 
     async function handleConfirm() {
         setConfirming(true);
         try {
-            console.log('Starting confirm');
             const response = await fetch('http://localhost:3000/fitness/confirm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify({
                     workoutname: workoutName,
-                    currDay: filteredWorkoutList?.at(0)?.day
+                    currDay: currWorkoutDay
                 }),
             });
-            console.log('Worked');
         } catch (err) {
             console.error('Failed to confirm edit: ', err);
         } finally {
-            setConfirming(false)
+            setNewWorkout(false);
+            setConfirming(false);
             setTrigger(false);
         }
     };
@@ -39,11 +40,29 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
                     workoutId: id
                 }),
             });
+            const result = await response.json();
             setDeleting(false);
 
         } catch (err) {
             console.error('Failed to delete exercise: ', err);
         }   
+    };
+
+    async function handleClear() {
+        setClearing(true);
+        try {
+            const response = await fetch('http://localhost:3000/fitness/clear', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    clearDay: currWorkoutDay
+                }),
+            });
+            setClearing(false);
+        } catch (err) {
+            console.error('Failed to clear workout: ', err);
+        }
     };
 
     const workoutList = filteredWorkoutList.map(workout => 
@@ -65,7 +84,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
                     <thead>
                         <tr>
                             <th colSpan="2">
-                                <input type="text" placeholder="Enter workout name" name="workoutname" defaultValue={ workouts.workoutNames.name } required 
+                                <input type="text" placeholder="Enter workout name" name="workoutname" defaultValue={ workoutName } required 
                                     onChange={e => setWorkoutName(e.target.value)}/>
                             </th>
                         </tr>
@@ -75,9 +94,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
                         {workoutList}
                         <tr>
                             <td>
-                                <form action="/plan/clear" method="POST">
-                                    <button style={{fontWeight: 100}} type="submit" name="clearday" value="<%= day %>">CLEAR</button>
-                                </form>
+                                <button style={{fontWeight: 100}} onClick={handleClear}>CLEAR</button>
                             </td>
                             <td style={{textAlign: 'right'}}>
                                 <button name="day" onClick={() => setAddPopup(true)}>+</button>

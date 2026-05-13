@@ -1,6 +1,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
+import Loading from './components/Loading';
 import { Home, Login, Fitness } from './pages';
 import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -95,7 +96,7 @@ function App() {
     }
 
     if (loading) {
-        return <div className='center'><div className='loader'/></div>
+        return <Loading />
     }
 
     return (

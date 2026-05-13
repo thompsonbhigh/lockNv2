@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
+import Loading from '../components/Loading';
 
 const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
     const [exercises, setExercises] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    console.log('Adding to: ', currWorkoutDay);
 
     async function getExercises() {
+        setLoading(true);
         try {
             const response = await fetch('http://localhost:3000/addExercise', { credentials: 'include' });
             const result = await response.json();
@@ -11,35 +16,36 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
             setExercises(result.exercises);
         } catch (err) {
             console.error('Failed to load exercises: ', err);
+        } finally {
+            setLoading(false);
         }
     };
 
     async function addExercise(id) {
         setAdding(true);
+        setLoading(true);
         try {
-            console.log('Attempting add');
             const response = await fetch('http://localhost:3000/addExercise', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
                 body: JSON.stringify({
-                    exerciseId: id
+                    exerciseId: id,
+                    day: currWorkoutDay
                 }),
             });
-            console.log('Adding worked!');
+            setAdding(false);
+            setLoading(false);
+            const result = await response.json();
+            setTrigger(false);
         } catch (err) {
             console.error('Failed to add exercise: ', err);
-        } finally {
-            setAdding(false);
-            setTrigger(false);
         }
     };
 
     useEffect(() => {
         getExercises();
     }, []);
-
-    console.log(exercises);
 
     const exerciseArray = Array.isArray(exercises) ? exercises : [];
 
@@ -50,6 +56,10 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
             <td style={{textAlign: 'center'}}><button class='add-btn' onClick={() => addExercise(exercise.id)}>+</button></td>
         </tr>
     )
+
+    if (loading) {
+        return <Loading />
+    }
 
     return (
         <section>

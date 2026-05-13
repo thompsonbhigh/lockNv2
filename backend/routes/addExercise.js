@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
     let index;
     const exerciseId = req.body.exerciseId;
     const userId = req.session.user.id;
-    const day = req.session.day || 0;
+    const day = req.body.day;
 
     const indexInfo = await db.query('SELECT index FROM workouts WHERE user_id = $1 AND day = $2 ORDER BY index DESC LIMIT 1', [userId, day]);
     if (!indexInfo.rows.at(0)) {

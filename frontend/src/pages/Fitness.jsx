@@ -10,6 +10,8 @@ const Fitness = ({ userInfo }) => {
     const [deleting, setDeleting] = useState(false);
     const [adding, setAdding] = useState(false);
     const [confirming, setConfirming] = useState(false);
+    const [clearing, setClearing] = useState(false);
+    const [newWorkout, setNewWorkout] = useState();
 
     async function getWorkoutData() {
         try {
@@ -73,15 +75,20 @@ const Fitness = ({ userInfo }) => {
 
     useEffect(() => {
         getWorkoutData();
-    }, [deleting, adding, confirming]);
+    }, [deleting, adding, confirming, clearing, newWorkout]);
 
-    useEffect(() => {
-        console.log('Workout data updated: ', workouts);
-    }, [workouts]);
+    let workoutDay = typeof workouts?.workoutNames?.day === 'number' ? workouts.workoutNames.day : 0;
 
-    const workoutDay = typeof workouts?.workoutNames?.day === 'number' ? workouts.workoutNames.day : 0;
+    let workoutName = typeof workouts?.workoutNames?.name === 'string' ? workouts.workoutNames.name : '';
 
-    const workoutName = typeof workouts?.workoutNames?.name === 'string' ? workouts.workoutNames.name : '';
+    console.log(newWorkout);
+
+    if (newWorkout) {
+        workoutDay = workoutDay + 1 ? workoutDay + 1 : 0;
+        workoutName = '';
+    }
+
+    console.log('workoutDay: ', workoutDay, 'workoutName: ', workoutName);
 
     const workoutArray = Array.isArray(workouts.workouts) ? workouts.workouts : [];
 
@@ -94,6 +101,8 @@ const Fitness = ({ userInfo }) => {
             <td>{workout.exercise_name}</td>
         </tr>
     )
+
+    console.log(workoutList);
 
     if (loading) {
         return <div className='center'><div className='loader'/></div>
@@ -116,6 +125,9 @@ const Fitness = ({ userInfo }) => {
                 setTrigger={setPopup} 
                 setAdding={setAdding}
                 setConfirming={setConfirming}
+                setClearing={setClearing}
+                newWorkout={newWorkout}
+                setNewWorkout={setNewWorkout}
                 />
                 } 
             />
@@ -155,7 +167,7 @@ const Fitness = ({ userInfo }) => {
 
                         <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
 
-                        <button type="submit">add</button>
+                        <button onClick={() => { setPopup(true); setNewWorkout(true)}}>add</button>
 
                         <button type="submit" name="currentday" value="<%= workoutNames.day %>" onClick={handleNext}>next</button>
                     </div>
