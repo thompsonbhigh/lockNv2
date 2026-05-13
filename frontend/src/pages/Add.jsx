@@ -1,9 +1,30 @@
 import { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
+import { useDebounce } from 'use-debounce';
 
 const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
     const [exercises, setExercises] = useState({});
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState('');
+    const [timeout] = useDebounce(search, 500);
+
+    async function handleSearch() {
+        try {
+            const response = await fetch('http://localhost:3000/addExercise/search', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    query: search
+                }),
+            });
+            const result = await response.json();
+            console.log('Searched exercises: ', result.exercises);
+            setExercises(result.exercises);
+        } catch (err) {
+            console.error('Failed to search: ', err);
+        }
+    };
 
     async function getExercises() {
         setLoading(true);
@@ -45,6 +66,10 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
         getExercises();
     }, []);
 
+    useEffect(() => {
+        handleSearch();
+    }, [timeout]);
+
     const exerciseArray = Array.isArray(exercises) ? exercises : [];
 
     const exerciseList = exerciseArray.map(exercise => 
@@ -66,9 +91,7 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
                     <thead>
                         <tr>
                             <th colSpan="3">
-                                <form action="../addExercise/search" method="GET">
-                                    <input type="text" name="query" placeholder="Search..." />
-                                </form>
+                                <input type="text" name="query" placeholder="Search..." onChange={e => setSearch(e.target.value)}/>
                             </th>
                         </tr>
                     </thead>

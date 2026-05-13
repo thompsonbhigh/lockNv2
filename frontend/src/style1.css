@@ -472,13 +472,13 @@ div.flex-container {
 }
 
 .add-container input {
-    background-color: #212529;
+    background-color: transparent;
     color: #F8F9FA;
     border: none;
     margin: 1vh;
     font-family: 'Montserrat', sans-serif;
     font-size: 3vh;
-    width: 100%;
+    width: 95%;
     height: 5vh;
 }
 
