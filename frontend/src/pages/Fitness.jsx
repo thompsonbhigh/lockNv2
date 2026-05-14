@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Popup from "../components/Popup";
 import Edit from './Edit';
 
-const Fitness = ({ userInfo }) => {
+const Fitness = ({ userInfo, setFinishWorkout }) => {
     const [workouts, setWorkouts] = useState({});
     const [loading, setLoading] = useState(true);
     const [popup, setPopup] = useState(false);
@@ -75,6 +75,24 @@ const Fitness = ({ userInfo }) => {
         }
     }
 
+    async function handleFinish(day) {
+        try {
+            const response = await fetch('http://localhost:3000/fitness/finish', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    workoutday: day
+                }),
+            });
+        } catch (err) {
+            console.error('Failed to finish workout: ', err);
+        } finally {
+            setFinishWorkout(true);
+            getWorkoutData();
+        }
+    };
+
     useEffect(() => {
         getWorkoutData();
     }, [deleting, adding, confirming, clearing, newWorkout]);
@@ -110,7 +128,7 @@ const Fitness = ({ userInfo }) => {
 
     let congratsMsg;
     if (workouts.hasWorkedOutToday) {
-        congratsMsg = <p>Good job on working out today!'</p>;
+        congratsMsg = <p>Good job on working out today!</p>;
     }
 
     return (
@@ -162,15 +180,15 @@ const Fitness = ({ userInfo }) => {
                     </table>
                         {congratsMsg}
                     <div class="fitness-btns">
-                        <button name="currentday" value="<%= workoutNames.day %>" onClick={handleBack}>back</button>
+                        <button onClick={handleBack}>back</button>
 
-                        <button name="editday" onClick={() => { setPopup(true); setIsEditing(true); setEditDay(workoutDay) }}>edit</button>
+                        <button onClick={() => { setPopup(true); setIsEditing(true); setEditDay(workoutDay) }}>edit</button>
 
-                        <button type="submit" value="<%=workoutNames.day%>" name="workoutday">finish workout</button>
+                        <button onClick={() => {handleFinish(workoutDay)}}>finish workout</button>
 
                         <button onClick={() => { setPopup(true); setNewWorkout(true)}}>add</button>
 
-                        <button type="submit" name="currentday" value="<%= workoutNames.day %>" onClick={handleNext}>next</button>
+                        <button onClick={handleNext}>next</button>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ function App() {
     const [userInfo, setUserInfo] = useState({});
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
+    const [finishWorkout, setFinishWorkout] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -88,6 +89,10 @@ function App() {
         }
     }, [isLoggedIn]);
 
+    useEffect(() => {
+        getUserData();
+    }, [finishWorkout]);
+
     let loginContent;
     if (!isLoggedIn) {
         loginContent = <Link to='/login' class="login">login</Link>
@@ -111,7 +116,7 @@ function App() {
                     <Route path='/' element={<HomeTitle />} />
                     <Route path='/home' element={<Home userInfo={userInfo} />} />
                     <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
-                    <Route path='/fitness' element={<Fitness userInfo={userInfo} />} />
+                    <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
                 </Routes>
 
         </main>
