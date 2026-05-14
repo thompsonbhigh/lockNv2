@@ -16,7 +16,7 @@ const Home = ({userInfo}) => {
                 <div class="home-card">
                     <h2>tasks</h2>
                     <p>rank: <span>{userInfo.taskRank}</span></p>
-                    <a href="/tasks"></a>
+                    <Link to='/tasks' />
                 </div>
 
                 <div class="home-card">

@@ -2,7 +2,7 @@ import { useState, useEffect, Suspense } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
 import Loading from './components/Loading';
-import { Home, Login, Fitness } from './pages';
+import { Home, Login, Fitness, Tasks } from './pages';
 import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const [finishWorkout, setFinishWorkout] = useState(false);
+    const [taskInfo, setTaskInfo] = useState({});
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -76,6 +77,17 @@ function App() {
         }
     }
 
+    async function getTaskInfo() {
+        try {
+            const response = await fetch('http://localhost:3000/tasks', {credentials: 'include'});
+            const result = await response.json();
+            console.log(result);
+            setTaskInfo(result);
+        } catch (err) {
+            console.error('Failed to get task info: ', err);
+        }
+    };
+
     function handleHomeClick() {
         navigate('/home');
         checkIsLoggedIn();
@@ -86,6 +98,7 @@ function App() {
         if (isLoggedIn) {
             setLoading(true);
             getUserData();
+            getTaskInfo();
         }
     }, [isLoggedIn]);
 
@@ -117,6 +130,7 @@ function App() {
                     <Route path='/home' element={<Home userInfo={userInfo} />} />
                     <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
                     <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
+                    <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} />} />
                 </Routes>
 
         </main>
