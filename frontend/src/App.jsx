@@ -130,7 +130,7 @@ function App() {
                     <Route path='/home' element={<Home userInfo={userInfo} />} />
                     <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
                     <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
-                    <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} />} />
+                    <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} getTaskInfo={getTaskInfo} getUserData={getUserData}/>} />
                 </Routes>
 
         </main>

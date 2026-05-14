@@ -736,3 +736,10 @@ input:focus {
     width: 100%;
     max-width: 1500px;
 }
+
+.new-task {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    margin: 3vh;
+}
