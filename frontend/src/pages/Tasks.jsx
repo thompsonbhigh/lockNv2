@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useState } from 'react'
 
 const Tasks = ({ userInfo, taskInfo, getTaskInfo, getUserData }) => {
-    const [tasks, setTasks] = useState();
     const [newTask, setNewTask] = useState('');
 
     async function handleNewTask() {

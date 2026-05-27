@@ -16,14 +16,17 @@ function addMonths(date, months) {
 }
 
 router.get('/', auth, async (req, res) => {
-    const result = await db.query('SELECT * FROM goals WHERE user_id = $1', [req.cookies.user.id]);
-    const result2 = await db.query('SELECT * FROM goals WHERE user_id = $1 AND status = false AND type = $2', [req.cookies.user.id, 'weekly']);
-    const result3 = await db.query('SELECT * FROM goals WHERE user_id = $1 AND status = false AND type = $2', [req.cookies.user.id, 'monthly']);
-    const result4 = await db.query('SELECT * FROM goals WHERE user_id = $1 AND status = false AND type = $2', [req.cookies.user.id, 'yearly']);
+    const userId = req.session.user.id;
+    const username = req.session.user.username;
 
-    const emptyInfoWeekly = await db.query('SELECT * FROM goals WHERE user_id = $1 AND type = $2', [req.cookies.user.id, 'weekly']);
-    const emptyInfoMonthly = await db.query('SELECT * FROM goals WHERE user_id = $1 AND type = $2', [req.cookies.user.id, 'monthly']);
-    const emptyInfoYearly = await db.query('SELECT * FROM goals WHERE user_id = $1 AND type = $2', [req.cookies.user.id, 'yearly']);
+    const result = await db.query('SELECT * FROM goals WHERE user_id = $1', [userId]);
+    const result2 = await db.query('SELECT * FROM goals WHERE user_id = $1 AND status = false AND type = $2', [userId, 'weekly']);
+    const result3 = await db.query('SELECT * FROM goals WHERE user_id = $1 AND status = false AND type = $2', [userId, 'monthly']);
+    const result4 = await db.query('SELECT * FROM goals WHERE user_id = $1 AND status = false AND type = $2', [userId, 'yearly']);
+
+    const emptyInfoWeekly = await db.query('SELECT * FROM goals WHERE user_id = $1 AND type = $2', [userId, 'weekly']);
+    const emptyInfoMonthly = await db.query('SELECT * FROM goals WHERE user_id = $1 AND type = $2', [userId, 'monthly']);
+    const emptyInfoYearly = await db.query('SELECT * FROM goals WHERE user_id = $1 AND type = $2', [userId, 'yearly']);
 
     const emptyWeekly = emptyInfoWeekly.rows.length == 0;
     const emptyMonthly = emptyInfoMonthly.rows.length == 0;
@@ -35,7 +38,7 @@ router.get('/', auth, async (req, res) => {
         yearly: emptyYearly
     };
 
-    const goalInfo= await db.query('SELECT rank, goals_completed FROM goal_leaderboard WHERE username = $1', [req.cookies.user.username]);
+    const goalInfo= await db.query('SELECT rank, goals_completed FROM goal_leaderboard WHERE username = $1', [username]);
     const goalRank = goalInfo.rows.at(0).rank;
     const goalsCompleted = goalInfo.rows.at(0).goals_completed;
 
@@ -47,20 +50,20 @@ router.get('/', auth, async (req, res) => {
     const today = date.toLocaleDateString('en-CA').slice(0, 10);
 
     const year = date.toLocaleDateString('en-CA').slice(0, 4);
-    const goalsYearInfo = await db.query('SELECT COUNT(*) FROM goals WHERE status = TRUE AND user_id = $1 AND EXTRACT(YEAR FROM date_completed) = $2', [req.cookies.user.id, year]);
+    const goalsYearInfo = await db.query('SELECT COUNT(*) FROM goals WHERE status = TRUE AND user_id = $1 AND EXTRACT(YEAR FROM date_completed) = $2', [userId, year]);
     const goalsYear = goalsYearInfo.rows.at(0).count;
 
     const weekDate = addDays(date, -7);
     const week = weekDate.toLocaleDateString('en-CA').slice(0, 10);
-    const goalsWeekInfo = await db.query('SELECT COUNT(*) FROM goals WHERE status = TRUE AND user_id = $1 AND date_completed BETWEEN $2 AND $3', [req.cookies.user.id, week, today]);
+    const goalsWeekInfo = await db.query('SELECT COUNT(*) FROM goals WHERE status = TRUE AND user_id = $1 AND date_completed BETWEEN $2 AND $3', [userId, week, today]);
     const goalsWeek = goalsWeekInfo.rows.at(0).count;
 
     const monthDate = addMonths(date, -1);
     const month = monthDate.toLocaleDateString('en-CA').slice(0, 10);
-    const goalsMonthInfo = await db.query('SELECT COUNT(*) FROM goals WHERE status = TRUE AND user_id = $1 AND date_completed BETWEEN $2 AND $3', [req.cookies.user.id, month, today]);
+    const goalsMonthInfo = await db.query('SELECT COUNT(*) FROM goals WHERE status = TRUE AND user_id = $1 AND date_completed BETWEEN $2 AND $3', [userId, month, today]);
     const goalsMonth = goalsMonthInfo.rows.at(0).count;
 
-    res.render('goals', {
+    res.json({
         goals: result.rows, 
         incompleteWeeklyGoals: incompleteWeeklyGoals, 
         incompleteMonthlyGoals: incompleteMonthlyGoals, 
@@ -75,21 +78,31 @@ router.get('/', auth, async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const { goal, goaltype } = req.body;
-    await db.query('INSERT INTO goals (user_id, goal, type) VALUES ($1, $2, $3)', [req.cookies.user.id, goal, goaltype]);
-    res.redirect('/goals');
+    const userId = req.session.user.id;
+    const goal = req.body.goal;
+    const goaltype = req.body.goalType;
+
+    await db.query('INSERT INTO goals (user_id, goal, type) VALUES ($1, $2, $3)', [userId, goal, goaltype]);
+
+    res.json({msg: 'goal added'});
 });
 
 router.post('/complete', async (req, res) => {
+    const userId = req.session.user.id;
     const goalId = req.body.goalid;
-    await db.query('UPDATE goals SET status = true, date_completed = $3 WHERE user_id = $1 AND id = $2', [req.cookies.user.id, goalId, new Date().toLocaleDateString().slice(0, 10)]);
-    await db.query('UPDATE users SET goals_completed = goals_completed + 1 WHERE id = $1', [req.cookies.user.id]);
-    res.redirect('/goals');
+
+    await db.query('UPDATE goals SET status = true, date_completed = $3 WHERE user_id = $1 AND id = $2', [userId, goalId, new Date().toLocaleDateString().slice(0, 10)]);
+    await db.query('UPDATE users SET goals_completed = goals_completed + 1 WHERE id = $1', [userId]);
+
+    res.json({msg: 'goal completed'});
 });
 
 router.post('/delete', async (req, res) => {
-    await db.query('DELETE FROM goals WHERE id = $1 AND user_id = $2', [req.body.goalid, req.cookies.user.id]);
-    res.redirect('/goals');
+    const userId = req.session.user.id;
+
+    await db.query('DELETE FROM goals WHERE id = $1 AND user_id = $2', [req.body.goalid, userId]);
+
+    res.json({msg: 'goal deleted'});
 })
 
 module.exports = router;

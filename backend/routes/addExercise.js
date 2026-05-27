@@ -8,11 +8,11 @@ router.get('/', async function(req, res){
     res.json(exercises);
 });
 
-router.get('/search', async (req, res) => {
-    const query = req.query.query;
+router.post('/search', async (req, res) => {
+    const query = req.body.query;
     const { rows } = await db.query('SELECT * FROM exercises WHERE name ILIKE $1 OR muscle ILIKE $1', [`%${query}%`]);
     const exercises = { exercises: rows };
-    res.render('addExercise', exercises);
+    res.json(exercises);
 });
 
 router.post('/', async (req, res) => {

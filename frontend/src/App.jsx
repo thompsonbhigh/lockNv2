@@ -2,7 +2,7 @@ import { useState, useEffect, Suspense } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
 import Loading from './components/Loading';
-import { Home, Login, Fitness, Tasks } from './pages';
+import { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals } from './pages';
 import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
@@ -12,6 +12,8 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [finishWorkout, setFinishWorkout] = useState(false);
     const [taskInfo, setTaskInfo] = useState({});
+    const [goalInfo, setGoalInfo] = useState({});
+    const [newGoal, setNewGoal] = useState('');
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,6 +23,63 @@ function App() {
             <h1 class="home-name">LOCKN</h1>
         )
     }
+
+    async function handleNewGoal(goalType) {
+        try {
+            const response = await fetch('http://localhost:3000/goals/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    goal: newGoal,
+                    goalType: goalType
+                }),
+            });
+            const result = await response.json();
+        } catch (err) {
+            console.error('Failed to add task: ', err);
+        } finally {
+            getGoalInfo();
+            setNewGoal('');
+        }
+    };
+
+    async function handleGoalComplete(id) {
+        try {
+            const response = await fetch('http://localhost:3000/goals/complete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    goalid: id
+                }),
+            });
+            const result = response.json();
+        } catch (err) {
+            console.error('Failed to complete goal: ', err);
+        } finally {
+            getGoalInfo();
+            getUserData();
+        }
+    };
+
+    async function handleGoalDelete(id) {
+        try {
+            const response = await fetch('http://localhost:3000/goals/delete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    goalid: id
+                }),
+            });
+            const result = await response.json();
+        } catch (err) {
+            console.error('Failed to delete goal: ', err);
+        } finally {
+            getGoalInfo();
+        }
+    };
 
     async function handleLogout() {
         try {
@@ -45,6 +104,7 @@ function App() {
                 }),
             });
             const userData = await response.json();
+            console.log(userData);
             setUserInfo(userData);
         } catch (err) {
             console.error('Failed to get user data: ', err);
@@ -81,10 +141,20 @@ function App() {
         try {
             const response = await fetch('http://localhost:3000/tasks', {credentials: 'include'});
             const result = await response.json();
-            console.log(result);
             setTaskInfo(result);
         } catch (err) {
             console.error('Failed to get task info: ', err);
+        }
+    };
+
+    async function getGoalInfo() {
+        try {
+            const response = await fetch('http://localhost:3000/goals', {credentials: 'include'});
+            const result = await response.json();
+            console.log('Goal info: ', result);
+            setGoalInfo(result);
+        } catch (err) {
+            console.error('Failed to get goal info: ', err);
         }
     };
 
@@ -99,6 +169,7 @@ function App() {
             setLoading(true);
             getUserData();
             getTaskInfo();
+            getGoalInfo();
         }
     }, [isLoggedIn]);
 
@@ -130,7 +201,13 @@ function App() {
                     <Route path='/home' element={<Home userInfo={userInfo} />} />
                     <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
                     <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
-                    <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} getTaskInfo={getTaskInfo} getUserData={getUserData}/>} />
+                    <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} getTaskInfo={getTaskInfo} getUserData={getUserData} />} />
+                    <Route path='/goals' element={<Goals userInfo={userInfo} goalInfo={goalInfo} getGoalInfo={getGoalInfo} getUserData={getUserData} />} >
+                        <Route path='week' element={<WeekGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
+                        handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
+                        <Route path='month' element={<MonthGoals goalInfo={goalInfo} />} />
+                        <Route path='year' element={<YearGoals goalInfo={goalInfo} />} />
+                    </Route>
                 </Routes>
 
         </main>

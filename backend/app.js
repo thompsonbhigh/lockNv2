@@ -68,9 +68,9 @@ app.post('/user-info', async (req, res) => {
     const userGoalInfo = await db.query('SELECT rank FROM goal_leaderboard WHERE username = $1', [username]);
     const userBasicInfo = await db.query('SELECT tasks_completed, goals_completed, workouts_completed, group_name, last_workout_date, last_workout FROM users WHERE id = $1', [userId]);
 
-    userWorkoutRank = userWorkoutInfo.rows.at(0).rank;
-    userTaskRank = userTaskInfo.rows.at(0).rank;
-    userGoalRank = userGoalInfo.rows.at(0).rank;
+    userWorkoutRank = userWorkoutInfo.rows.at(0)?.rank;
+    userTaskRank = userTaskInfo.rows.at(0)?.rank;
+    userGoalRank = userGoalInfo.rows.at(0)?.rank;
     basicInfo = userBasicInfo.rows.at(0);
 
     res.json(
@@ -78,16 +78,16 @@ app.post('/user-info', async (req, res) => {
             workoutRank: userWorkoutRank,
             taskRank: userTaskRank, 
             goalRank: userGoalRank,
-            workoutsCompleted: basicInfo.workouts_completed,
-            tasksCompleted: basicInfo.tasks_completed,
-            goalsCompleted: basicInfo.goals_completed,
-            lastWorkoutDate: basicInfo.last_workout_date ? basicInfo.last_workout_date.toLocaleDateString('en-US', {
+            workoutsCompleted: basicInfo?.workouts_completed,
+            tasksCompleted: basicInfo?.tasks_completed,
+            goalsCompleted: basicInfo?.goals_completed,
+            lastWorkoutDate: basicInfo?.last_workout_date ? basicInfo.last_workout_date.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             }) : null,
-            lastWorkout: basicInfo.last_workout,
-            group: basicInfo.group_name
+            lastWorkout: basicInfo?.last_workout,
+            group: basicInfo?.group_name
         }
     );
 });

@@ -193,7 +193,9 @@ router.post('/next', async (req, res) => {
 });
 
 router.post('/finish', async (req, res) => {
+    const userId = req.session.user.id;
     const finishDay = req.body.workoutday;
+
     const finishNameInfo = await db.query('SELECT DISTINCT name FROM workouts WHERE user_id = $1 AND day = $2', [userId, finishDay]);
     const finishName = finishNameInfo.rows.at(0).name;
     await db.query('UPDATE users SET last_workout = $1 WHERE id = $2', [finishName, userId]);
@@ -203,7 +205,7 @@ router.post('/finish', async (req, res) => {
     await db.query('UPDATE users SET last_workout_date = $1 WHERE id = $2', [today, userId]);
     await db.query('UPDATE users SET workouts_completed = workouts_completed + 1 WHERE id = $1', [userId]);
 
-    res.redirect('/plan');
+    res.json({ msg: 'Workout finished '});
 })
 
 module.exports = router;
