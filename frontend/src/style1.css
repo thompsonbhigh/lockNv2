@@ -530,6 +530,7 @@ input:focus {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    animation: fadeInCards 0.8s 0s forwards;
 }
 
 .leaderboard-container table {
@@ -588,6 +589,7 @@ input:focus {
     font-weight: 200;
     justify-self: center;
     margin: -5px;
+    animation: fadeInTitle 0.8s 0s forwards;
 }
 
 .subheader th {

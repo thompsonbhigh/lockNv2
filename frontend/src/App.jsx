@@ -2,7 +2,7 @@ import { useState, useEffect, Suspense } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
 import Loading from './components/Loading';
-import { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals } from './pages';
+import { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals, Rankings } from './pages';
 import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
     const [taskInfo, setTaskInfo] = useState({});
     const [goalInfo, setGoalInfo] = useState({});
     const [newGoal, setNewGoal] = useState('');
+    const [rankings, setRankings] = useState({});
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,6 +24,18 @@ function App() {
             <h1 class="home-name">LOCKN</h1>
         )
     }
+
+    async function getRankingInfo() {
+        try {
+            const response = await fetch('http://localhost:3000/leaderboard', { credentials: 'include'});
+            const result = await response.json();
+
+            console.log('Rankings: ', result);
+            setRankings(result);
+        } catch (err) {
+            console.error('Failed to get rankings: ', err);
+        }
+    };
 
     async function handleNewGoal(goalType) {
         try {
@@ -170,6 +183,7 @@ function App() {
             getUserData();
             getTaskInfo();
             getGoalInfo();
+            getRankingInfo();
         }
     }, [isLoggedIn]);
 
@@ -210,6 +224,7 @@ function App() {
                         <Route path='year' element={<YearGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
                         handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
                     </Route>
+                    <Route path='/rankings' element={<Rankings rankings={rankings} />} />
                 </Routes>
 
         </main>

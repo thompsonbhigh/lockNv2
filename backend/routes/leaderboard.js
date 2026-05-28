@@ -13,8 +13,8 @@ router.get('/', auth, async (req, res) => {
     const workoutResult = await db.query('SELECT * FROM workout_leaderboard ORDER BY rank');
     const workoutLeaderboard = workoutResult.rows;
 
-    const username = req.cookies.user.username;
-    res.render('leaderboard', {
+    const username = req.session.user.username;
+    res.json({
         taskLeaderboard: taskLeaderboard, 
         goalLeaderboard: goalLeaderboard, 
         workoutLeaderboard: workoutLeaderboard,

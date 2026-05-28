@@ -29,7 +29,7 @@ const Home = ({userInfo}) => {
                 <div class="home-card">
                     <h2>rankings</h2>
                     <p></p>
-                    <a href="/leaderboard"></a>
+                    <Link to='/rankings' />
                 </div>
                 <div class="home-card">
                     <h2>groups</h2>
