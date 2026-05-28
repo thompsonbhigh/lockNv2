@@ -1,23 +1,30 @@
 import { useState, useEffect } from 'react'
 
-const MonthGoals = ({ goalInfo }) => {
+const MonthGoals = ({ goalInfo, handleComplete, handleDelete, newGoal, setNewGoal, handleNewGoal }) => {
+
+    let completionMsg;
+    if (goalInfo.isEmpty.monthly) {
+        completionMsg = <p>You haven't added any goals yet!</p>
+    } else if (!goalInfo.incompleteMonthlyGoals) {
+        completionMsg = <p>You've completed all your monthly goals!</p>
+    }
 
     const goalArray = Array.isArray(goalInfo.goals) ? goalInfo.goals : [];
 
     const filteredGoals = goalArray.filter(goal => 
-        goal.type === 'monthly'
+        goal.type === 'monthly' && goal.status === false
     );
 
     const goalList = filteredGoals.map(goal => 
         <tr key={goal.id}>
             <td style={{textAlign: 'center', width: 3 + 'vh'}}>
-                <button>✓</button>
+                <button onClick={e => handleComplete(goal.id)}>✓</button>
             </td>
             <td>
                 {goal.goal}
             </td>
             <td style={{textAlign: 'right'}}>
-                <button>−</button>
+                <button onClick={e => handleDelete(goal.id)}>−</button>
             </td>
         </tr>
     );
@@ -28,26 +35,13 @@ const MonthGoals = ({ goalInfo }) => {
                 <table>
                     <tbody>
                         {goalList}
-                        <tr>
-                            <td colspan="3">
-                                <form class="task-form" action="/goals/add" method="POST">
-                                    <div>
-                                        <input type="text" placeholder="enter a goal" name="goal" required />
-                                        <input type="hidden" name="goaltype" value="weekly" />
-                                    </div>
-                                    <div>
-                                        <button type="submit">+</button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
-                {/* <% if (isEmpty.weekly) { %>
-                    <p>You haven't added any goals yet!</p>
-                <% } else if (!incompleteWeeklyGoals) { %>
-                    <p>You've completed all your weekly goals!</p>
-                <% } %> */}
+                    {completionMsg}
+                    <div class='new-task'>
+                        <input type="text" placeholder="enter a goal" value={newGoal} required onChange={e => setNewGoal(e.target.value)}/>
+                        <button onClick={e => handleNewGoal('monthly')}>+</button>
+                    </div>
             </div>
         </section>
     )

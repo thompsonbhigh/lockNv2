@@ -205,8 +205,10 @@ function App() {
                     <Route path='/goals' element={<Goals userInfo={userInfo} goalInfo={goalInfo} getGoalInfo={getGoalInfo} getUserData={getUserData} />} >
                         <Route path='week' element={<WeekGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
                         handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
-                        <Route path='month' element={<MonthGoals goalInfo={goalInfo} />} />
-                        <Route path='year' element={<YearGoals goalInfo={goalInfo} />} />
+                        <Route path='month' element={<MonthGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
+                        handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
+                        <Route path='year' element={<YearGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
+                        handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
                     </Route>
                 </Routes>
 

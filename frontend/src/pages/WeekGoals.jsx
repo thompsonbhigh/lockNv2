@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react'
 
 const WeekGoals = ({ goalInfo, handleComplete, handleDelete, newGoal, setNewGoal, handleNewGoal }) => {
 
+    let completionMsg;
+    if (goalInfo.isEmpty.weekly) {
+        completionMsg = <p>You haven't added any goals yet!</p>
+    } else if (!goalInfo.incompleteWeeklyGoals) {
+        completionMsg = <p>You've completed all your weekly goals!</p>
+    }
+
     const goalArray = Array.isArray(goalInfo.goals) ? goalInfo.goals : [];
 
     const filteredGoals = goalArray.filter(goal => 
@@ -30,11 +37,7 @@ const WeekGoals = ({ goalInfo, handleComplete, handleDelete, newGoal, setNewGoal
                         {goalList}
                     </tbody>
                 </table>
-                {/* <% if (isEmpty.weekly) { %>
-                    <p>You haven't added any goals yet!</p>
-                <% } else if (!incompleteWeeklyGoals) { %>
-                    <p>You've completed all your weekly goals!</p>
-                <% } %> */}
+                    {completionMsg}
                     <div class='new-task'>
                         <input type="text" placeholder="enter a goal" value={newGoal} required onChange={e => setNewGoal(e.target.value)}/>
                         <button onClick={e => handleNewGoal('weekly')}>+</button>

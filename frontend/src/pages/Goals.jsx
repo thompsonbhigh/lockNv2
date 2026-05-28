@@ -2,6 +2,13 @@ import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const Goals = ({ userInfo, goalInfo }) => {
+    const tabsStyle = ({ isActive }) => ({
+        color: isActive ? '#F8F9FA' : '#495057',
+        backgroundColor: 'transparent',
+        border: 'none',
+        textAlign: 'center',
+        textDecoration: 'none'
+    });
 
     return (
         <section>
@@ -18,9 +25,9 @@ const Goals = ({ userInfo, goalInfo }) => {
 
             <div class="plan-container" id="goal-plan-container">
                 <div class="goal-btns">
-                    <NavLink to='/goals/week' end>Week</NavLink>
-                    <NavLink to='/goals/month' end>Month</NavLink>
-                    <NavLink to='/goals/year' end>Year</NavLink>
+                    <NavLink to='/goals/week' style={tabsStyle} end>Week</NavLink>
+                    <NavLink to='/goals/month' style={tabsStyle} end>Month</NavLink>
+                    <NavLink to='/goals/year' style={tabsStyle} end>Year</NavLink>
                 </div>
                 <Outlet />
 

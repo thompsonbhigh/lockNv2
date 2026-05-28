@@ -22,7 +22,7 @@ const Home = ({userInfo}) => {
                 <div class="home-card">
                     <h2>goals</h2>
                     <p>rank: <span>{userInfo.goalRank}</span></p>
-                    <Link to='/goals' />
+                    <Link to='/goals/week' />
                 </div>
             </div>
             <div class="path-flex">
