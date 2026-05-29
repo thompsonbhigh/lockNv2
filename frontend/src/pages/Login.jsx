@@ -6,7 +6,7 @@ export default function Login({setIsLoggedIn, setUser}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const backend = process.env.BACKEND_URL;
+    const backend = import.meta.env.VITE_BACKEND_URL;
     
     const navigate = useNavigate();
 

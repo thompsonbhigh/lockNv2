@@ -15,6 +15,8 @@ const Fitness = ({ userInfo, setFinishWorkout }) => {
     const [isEditing, setIsEditing] = useState();
     const [editDay, setEditDay] = useState();
 
+    const backend = import.meta.env.VITE_BACKEND_URL;
+
     async function getWorkoutData() {
         try {
             const response = await fetch(`${backend}/fitness`, {credentials: 'include'});

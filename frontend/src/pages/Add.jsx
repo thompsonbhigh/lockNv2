@@ -8,6 +8,8 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
     const [search, setSearch] = useState('');
     const [timeout] = useDebounce(search, 500);
 
+    const backend = import.meta.env.VITE_BACKEND_URL;
+
     async function handleSearch() {
         try {
             const response = await fetch(`${backend}/addExercise/search`, {

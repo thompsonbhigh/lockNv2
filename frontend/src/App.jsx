@@ -16,7 +16,7 @@ function App() {
     const [newGoal, setNewGoal] = useState('');
     const [rankings, setRankings] = useState({});
 
-    const backend = process.env.BACKEND_URL;
+    const backend = import.meta.env.VITE_BACKEND_URL;
 
     const navigate = useNavigate();
     const location = useLocation();

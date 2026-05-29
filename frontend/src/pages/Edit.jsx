@@ -6,6 +6,8 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
     const [workoutName, setWorkoutName] = useState(currWorkoutName);
     const [addPopup, setAddPopup] = useState(false);
 
+    const backend = import.meta.env.VITE_BACKEND_URL;
+
     async function handleConfirm() {
         setConfirming(true);
         try {

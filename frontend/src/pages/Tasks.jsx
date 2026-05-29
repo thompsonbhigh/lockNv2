@@ -3,7 +3,8 @@ import { useState } from 'react'
 
 const Tasks = ({ userInfo, taskInfo, getTaskInfo, getUserData }) => {
     const [newTask, setNewTask] = useState('');
-    const backend = process.env.BACKEND_URL;
+
+    const backend = import.meta.env.VITE_BACKEND_URL;
 
     async function handleNewTask() {
         try {
