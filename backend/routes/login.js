@@ -27,6 +27,7 @@ const authJWT = (req, res, next) => {
 
 router.get('/auth', (req, res) => {
     const token = req.session?.user?.token;
+    console.log(req.session);
 
     if (!token) {
         return res.json({ isLoggedIn: false });
