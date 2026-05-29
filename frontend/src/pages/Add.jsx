@@ -10,7 +10,7 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
 
     async function handleSearch() {
         try {
-            const response = await fetch('http://localhost:3000/addExercise/search', {
+            const response = await fetch(`${backend}/addExercise/search`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -29,7 +29,7 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
     async function getExercises() {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3000/addExercise', { credentials: 'include' });
+            const response = await fetch(`${backend}/addExercise`, { credentials: 'include' });
             const result = await response.json();
 
             setExercises(result.exercises);
@@ -44,7 +44,7 @@ const Add = ({ currWorkoutDay, setAdding, setTrigger }) => {
         setAdding(true);
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3000/addExercise', {
+            const response = await fetch(`${backend}/addExercise`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',

@@ -5,13 +5,15 @@ export default function Login({setIsLoggedIn, setUser}) {
     const [incorrectLogin, setIncorrectLogin] = useState();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const backend = process.env.BACKEND_URL;
     
     const navigate = useNavigate();
 
     async function tryLogin(event) {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch(`${backend}/login`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',

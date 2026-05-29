@@ -3,10 +3,11 @@ import { useState } from 'react'
 
 const Tasks = ({ userInfo, taskInfo, getTaskInfo, getUserData }) => {
     const [newTask, setNewTask] = useState('');
+    const backend = process.env.BACKEND_URL;
 
     async function handleNewTask() {
         try {
-            const response = await fetch('http://localhost:3000/tasks/add', {
+            const response = await fetch(`${backend}/tasks/add`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -25,7 +26,7 @@ const Tasks = ({ userInfo, taskInfo, getTaskInfo, getUserData }) => {
 
     async function handleComplete(id) {
         try {
-            const response = await fetch('http://localhost:3000/tasks/complete', {
+            const response = await fetch(`${backend}/tasks/complete`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -44,7 +45,7 @@ const Tasks = ({ userInfo, taskInfo, getTaskInfo, getUserData }) => {
 
     async function handleDelete(id) {
         try {
-            const response = await fetch('http://localhost:3000/tasks/delete', {
+            const response = await fetch(`${backend}/tasks/delete`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',

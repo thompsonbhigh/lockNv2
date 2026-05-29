@@ -9,7 +9,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
     async function handleConfirm() {
         setConfirming(true);
         try {
-            const response = await fetch('http://localhost:3000/fitness/confirm', {
+            const response = await fetch(`${backend}/fitness/confirm`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -31,7 +31,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
     async function handleDelete(id) {
         try {
             setDeleting(true);
-            const response = await fetch('http://localhost:3000/fitness/delete', {
+            const response = await fetch(`${backend}/fitness/delete`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -50,7 +50,7 @@ const Edit = ({ workouts, filteredWorkoutList, setDeleting, currWorkoutName, set
     async function handleClear() {
         setClearing(true);
         try {
-            const response = await fetch('http://localhost:3000/fitness/clear', {
+            const response = await fetch(`${backend}/fitness/clear`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',

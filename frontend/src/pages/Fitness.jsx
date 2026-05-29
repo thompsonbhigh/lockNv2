@@ -17,7 +17,7 @@ const Fitness = ({ userInfo, setFinishWorkout }) => {
 
     async function getWorkoutData() {
         try {
-            const response = await fetch('http://localhost:3000/fitness', {credentials: 'include'});
+            const response = await fetch(`${backend}/fitness`, {credentials: 'include'});
             const workoutData = await response.json();
             setWorkouts(workoutData);
         } catch (err) {
@@ -29,7 +29,7 @@ const Fitness = ({ userInfo, setFinishWorkout }) => {
 
     async function handleNext() {
         try {
-            const response = await fetch('http://localhost:3000/fitness/next', {
+            const response = await fetch(`${backend}/fitness/next`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -53,7 +53,7 @@ const Fitness = ({ userInfo, setFinishWorkout }) => {
 
     async function handleBack() {
         try {
-            const response = await fetch('http://localhost:3000/fitness/back', {
+            const response = await fetch(`${backend}/fitness/back`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -77,7 +77,7 @@ const Fitness = ({ userInfo, setFinishWorkout }) => {
 
     async function handleFinish(day) {
         try {
-            const response = await fetch('http://localhost:3000/fitness/finish', {
+            const response = await fetch(`${backend}/fitness/finish`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',

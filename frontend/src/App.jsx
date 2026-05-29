@@ -16,6 +16,8 @@ function App() {
     const [newGoal, setNewGoal] = useState('');
     const [rankings, setRankings] = useState({});
 
+    const backend = process.env.BACKEND_URL;
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -27,7 +29,7 @@ function App() {
 
     async function getRankingInfo() {
         try {
-            const response = await fetch('http://localhost:3000/leaderboard', { credentials: 'include'});
+            const response = await fetch(`${backend}/leaderboard`, { credentials: 'include'});
             const result = await response.json();
 
             console.log('Rankings: ', result);
@@ -39,7 +41,7 @@ function App() {
 
     async function handleNewGoal(goalType) {
         try {
-            const response = await fetch('http://localhost:3000/goals/add', {
+            const response = await fetch(`${backend}/goals/add`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -59,7 +61,7 @@ function App() {
 
     async function handleGoalComplete(id) {
         try {
-            const response = await fetch('http://localhost:3000/goals/complete', {
+            const response = await fetch(`${backend}/goals/complete`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -78,7 +80,7 @@ function App() {
 
     async function handleGoalDelete(id) {
         try {
-            const response = await fetch('http://localhost:3000/goals/delete', {
+            const response = await fetch(`${backend}/goals/delete`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -99,7 +101,7 @@ function App() {
             setIsLoggedIn(false);
             setUserInfo({});
             setUser({});
-            const response = await fetch('http://localhost:3000/logout', {credentials: 'include'});
+            const response = await fetch(`${backend}/logout`, {credentials: 'include'});
         } catch (err) {
             console.error('Failed to logout: ', err);
         }
@@ -107,7 +109,7 @@ function App() {
 
     async function getUserData() {
         try {
-            const response = await fetch(`http://localhost:3000/user-info`, {
+            const response = await fetch(`${backend}/user-info`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -128,7 +130,7 @@ function App() {
 
     async function checkIsLoggedIn() {
         try {
-            const response = await fetch('http://localhost:3000/login/auth', {credentials: 'include'});
+            const response = await fetch(`${backend}/login/auth`, {credentials: 'include'});
             const loginInfo = await response.json();
 
             if (loginInfo.isLoggedIn === true) {
@@ -152,7 +154,7 @@ function App() {
 
     async function getTaskInfo() {
         try {
-            const response = await fetch('http://localhost:3000/tasks', {credentials: 'include'});
+            const response = await fetch(`${backend}/tasks`, {credentials: 'include'});
             const result = await response.json();
             setTaskInfo(result);
         } catch (err) {
@@ -162,7 +164,7 @@ function App() {
 
     async function getGoalInfo() {
         try {
-            const response = await fetch('http://localhost:3000/goals', {credentials: 'include'});
+            const response = await fetch(`${backend}/goals`, {credentials: 'include'});
             const result = await response.json();
             console.log('Goal info: ', result);
             setGoalInfo(result);
