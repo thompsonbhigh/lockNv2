@@ -19,6 +19,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
+app.set('trust proxy', 1);
+
 app.use(cors({
     origin: ['http://127.0.0.1:5173', 'http://localhost:5173', 'https://lockn.up.railway.app'],
     credentials: true,
@@ -31,7 +33,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         secure: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24 * 7,
     },
 }));
