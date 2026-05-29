@@ -20,7 +20,7 @@ const app = express();
 const port = 3000;
 
 app.use(cors({
-    origin: ['http://127.0.0.1:5173', 'http://localhost:5173', 'lockn.up.railway.app'],
+    origin: ['http://127.0.0.1:5173', 'http://localhost:5173', 'https://lockn.up.railway.app'],
     credentials: true,
 }));
 
