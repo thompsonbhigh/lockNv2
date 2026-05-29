@@ -49,15 +49,6 @@ app.use('/goals', goals);
 app.use('/leaderboard', leaderboard);
 app.use('/groups', groups);
 app.use('/ai', ai);
-
-user = null;
-app.get('/', async (req, res) => {
-    user = req.cookies.user;
-    if (!user) {
-        user = 0;
-    }
-    res.json(user);
-});
     
 app.post('/user-info', async (req, res) => {
     const username = req.body.username;
