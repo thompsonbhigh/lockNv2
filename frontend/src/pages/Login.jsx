@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login({setIsLoggedIn, setUser}) {
     const [incorrectLogin, setIncorrectLogin] = useState();
@@ -53,7 +53,7 @@ export default function Login({setIsLoggedIn, setUser}) {
 
                     <button type="submit">Login</button>
                 </form>
-                <a href="../createAccount">Create Account</a>
+                <Link to='/create-account'>Create Account</Link>
             </div>
         </section>
     )

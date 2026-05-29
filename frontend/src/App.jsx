@@ -2,7 +2,7 @@ import { useState, useEffect, Suspense } from 'react'
 import './style1.css'
 import locknLogo from './assets/lockNWhite-01.png';
 import Loading from './components/Loading';
-import { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals, Rankings } from './pages';
+import { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals, Rankings, CreateAccount } from './pages';
 import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
@@ -216,6 +216,7 @@ function App() {
                     <Route path='/' element={<HomeTitle />} />
                     <Route path='/home' element={<Home userInfo={userInfo} />} />
                     <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
+                    <Route path='/create-account' element={<CreateAccount />} />
                     <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
                     <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} getTaskInfo={getTaskInfo} getUserData={getUserData} />} />
                     <Route path='/goals' element={<Goals userInfo={userInfo} goalInfo={goalInfo} getGoalInfo={getGoalInfo} getUserData={getUserData} />} >

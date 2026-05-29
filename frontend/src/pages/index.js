@@ -7,5 +7,6 @@ import WeekGoals from './WeekGoals';
 import MonthGoals from './MonthGoals';
 import YearGoals from './YearGoals';
 import Rankings from './Rankings';
+import CreateAccount from './CreateAccount';
 
-export { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals, Rankings };
+export { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals, Rankings, CreateAccount };
