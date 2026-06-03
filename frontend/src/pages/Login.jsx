@@ -43,17 +43,17 @@ export default function Login({setIsLoggedIn, setUser}) {
                 <h2>Login to Your Account</h2>
                 <p>{incorrectLogin}</p>
                 <form onSubmit={tryLogin}>
-                    <div>
-                        <input type="text" size="20%" placeholder="Username" name="uname" required onChange={e => setUsername(e.target.value)}/>
-                    </div>
+                    <input id='username' type="text" size="20%" placeholder="USERNAME" name="uname" required onChange={e => setUsername(e.target.value)}/>
 
-                    <div>
-                        <input type="password" size="20%" placeholder="Password"  name="psw" required onChange={e => setPassword(e.target.value)}/>
-                    </div>
+                    <input type="password" size="20%" placeholder="PASSWORD"  name="psw" required onChange={e => setPassword(e.target.value)}/>
 
-                    <button type="submit">Login</button>
+                    <button className='start-btn' type="submit">Login</button>
                 </form>
-                <Link to='/create-account'>Create Account</Link>
+                <hr/>
+                <div className='login-links'>
+                    <a>Forgot Password?</a>
+                    <Link to='/create-account'>Create Account</Link>
+                </div>
             </div>
         </section>
     )

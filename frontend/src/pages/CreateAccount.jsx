@@ -59,21 +59,19 @@ const CreateAccount = () => {
                 <h2>Create an Account</h2>
                 <p>{statusMsg}</p>
                 <form onSubmit={tryCreateAcc}>
-                    <div>
-                        <input type="text" size="20%" placeholder="Username" name="uname" required onChange={e => setUsername(e.target.value)}/>
-                    </div>
+                    <input type="text" size="20%" placeholder="USERNAME" name="uname" required onChange={e => setUsername(e.target.value)}/>
 
-                    <div>
-                        <input type="password" size="20%" placeholder="Password"  name="psw" required onChange={e => setPassword(e.target.value)}/>
-                    </div>
+                    <input type="password" size="20%" placeholder="PASSWORD"  name="psw" required onChange={e => setPassword(e.target.value)}/>
 
-                    <div>
-                        <input type="password" size="20%" placeholder="Confirm Password"  name="confpsw" required onChange={e => setConfirmPassword(e.target.value)}/>
-                    </div>
+                    <input type="password" size="20%" placeholder="CONFIRM PASSWORD"  name="confpsw" required onChange={e => setConfirmPassword(e.target.value)}/>
 
-                    <button type="submit">Create Account</button>
+                    <button className='start-btn' type="submit">Create Account</button>
                 </form>
-                <Link to='/login'>Login</Link>
+                <hr/>
+                <div className="login-links">
+                    <div/>
+                    <Link to='/login'>Login</Link>
+                </div>
             </div>
         </section>
     )

@@ -1,34 +1,147 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 html {
-    background-color: black;
-    background-size: cover;
-    width: 100%;
-    height: 99%;
-    margin: 0;
-    padding: 0;
+    background-color: #000000;
 }
 
 body {
-    height: 99%;
-}
-
-body::after {
-  content: "";
-  background: url(../assests/images/plastic-texture.jpg);
-  opacity: 0.07;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
 }
 
 .logo {
-    max-width: 10vh;
+    max-width: 2.5vw;
+    margin: -0.5vw;
+    margin-right: 6vw;
     cursor: pointer;
+}
+
+.home-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    gap: 0;
+    flex-direction: column;
+}
+
+.home-name h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 150px;
+    color: #FFFFFF;
+
+    text-shadow: 0 0 10px #BB9AFF;
+
+    margin: -20px;
+    padding: 0;
+}
+
+.home-name p {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 200;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: 32px;
+    color: #8990A8;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #131b2e85;
+    border-bottom: #283044 1px solid;
+
+    padding: 25px;
+    top: 0;
+    left: 0;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 3vw;
+}
+
+.navbar-links > * {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    transition: 0.3s;
+}
+
+.navbar-links > *:hover {
+    color: #A476FF;
+    transition: 0.3s;
+}
+
+.login-btn {
+    background-color: #131B2E;
+    border: #6F778E 1px solid;
+    border-radius: 10px;
+    
+    font-family: 'JetBrains Mono', monospace;
+    color: #FFFFFF;
+    font-size: 16px;
+    width: 8vw;
+    height: 5vh;
+
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #283044;
+    color: #A476FF;
+    transition: 0.3s;
+}
+
+.start-btn {
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    font-size: 24px;
+
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    margin: 10px;
+    text-align: center;
+    align-items: center;
+    padding: 2vh;
+
+    background-color: #5A00C6;
+    background-image: linear-gradient(to bottom, #5A00C6 50%, #8D4FFF 50%);
+    background-size: 100% 200%;
+    background-position: top;
+    box-shadow: 0 0 10px #732EE4;
+
+    border: none;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.start-btn:hover {
+    background-position: bottom;
+    transform: scale(1.2);
+}
+
+.start-btn img {
+    transition: 0.3s;
+}
+
+.start-btn:hover img {
+    transition: 0.3s;
+    transform: rotate(30deg);
 }
 
 .mainHeader {
@@ -123,16 +236,6 @@ body::after {
     transform: translateY(-5px);    
 }
 
-.home-name {
-    font-size: 128px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-style: italic;
-    text-align: center;
-    color: #F8F9FA;
-    margin-bottom: 20px;
-}
-
 .home-card a {
     content: "";
     position: absolute;
@@ -217,26 +320,27 @@ div.flex-container {
 }
 
 .login-container {
-    width: min(90%, 50vh);
-    height: 35%;
+    width: min(90%, 25vw);
+    height: 100%;
     padding: 20px;
-    padding-top: 0px;
-    background-color: black;
+    background-color: #131b2e85;
     justify-self: center;
     text-align: center;
-    border: #F8F9FA;
+    border: #3F465C;
+    border-radius: 10px;
     border-style: solid;
     border-width: 1px;
+    margin: 10vh;
 }
 
 .login-container h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
     color: #F8F9FA;
-    font-weight: 200;
+    font-weight: 300;
 }
 
 .login-container p {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     color: #F8F9FA;
     font-weight: 200;
 }
@@ -245,37 +349,63 @@ div.flex-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: left;
+    align-items: center;
+    justify-self: center;
+    gap: 30px;
+    width: 100%;
 }
 
 .login-container input {
-    display: flex;
-    justify-content: center;
-    background-color: #212522;
-    border: none;
-    margin-bottom: 2vh;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3vh;
+    background-color: #131B2E;
+    border: #283044 1px solid;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
     font-weight: 200;
-    color: #F8F9FA;
-    width: 99%;
-}
-
-.login-container button {
-    font-family: 'Montserrat', sans-serif;
-    padding: 1vh 2vh;
-    font-size: 18px;
-    color: #F8F9FA;
-    background-color: black;
-    cursor: pointer;
-    border: none;
-    width: 100%;
-    margin-bottom: 2vh;
+    color: white;
+    padding: 15px;
+    width: 84%;
 }
 
 .login-container a {
     color: #F8F9FA;
     font-family: 'Montserrat', sans-serif;
+}
+
+.login-container button {
+    width: 90%;
+    padding: 15px;
+}
+
+.login-container button:hover {
+    transform: scale(1.1);
+}
+
+.login-container hr {
+    margin-top: 50px;
+    border: #283044 1px solid;
+    width: 90%;
+}
+
+.login-links {
+    display: flex;
+    justify-self: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+
+.login-container .login-links > * {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 100;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.login-container .login-links > *:hover {
+    color: #A476FF;
+    transition: 0.2s;
 }
 
 .task-form {

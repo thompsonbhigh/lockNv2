@@ -1,9 +1,11 @@
 import { useState, useEffect, Suspense } from 'react'
-import './style1.css'
+import './modern.css'
 import locknLogo from './assets/lockNWhite-01.png';
+import keyIcon from './assets/key.svg';
 import Loading from './components/Loading';
+import Navbar from './components/Navbar';
 import { Home, Login, Fitness, Tasks, Goals, WeekGoals, MonthGoals, YearGoals, Rankings, CreateAccount } from './pages';
-import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Link, useNavigate, useLocation, replace } from 'react-router-dom';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +25,14 @@ function App() {
 
     function HomeTitle() {
         return (
-            <h1 class="home-name">LOCKN</h1>
+            <div class="home-name">
+                <h1>LOCKN</h1>
+                <p>Lock in your routine.</p>
+                <button onClick={e => navigate('/create-account')} className='start-btn'>
+                    GET STARTED
+                    <img src={keyIcon} alt='key' />
+                </button>
+            </div>
         )
     }
 
@@ -104,6 +113,8 @@ function App() {
             const response = await fetch(`${backend}/logout`, {credentials: 'include'});
         } catch (err) {
             console.error('Failed to logout: ', err);
+        } finally {
+            navigate('/', {replace: true});
         }
     }
 
@@ -206,30 +217,25 @@ function App() {
 
     return (
         <main>
-            <div class="mainHeader">
-                <img class="logo" src={locknLogo} onClick={handleHomeClick}/>
-                <br/>
-                {loginContent}
-            </div>
+            <Navbar handleHomeClick={handleHomeClick} isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
 
-                <Routes>
-                    <Route path='/' element={<HomeTitle />} />
-                    <Route path='/home' element={<Home userInfo={userInfo} />} />
-                    <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
-                    <Route path='/create-account' element={<CreateAccount />} />
-                    <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
-                    <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} getTaskInfo={getTaskInfo} getUserData={getUserData} />} />
-                    <Route path='/goals' element={<Goals userInfo={userInfo} goalInfo={goalInfo} getGoalInfo={getGoalInfo} getUserData={getUserData} />} >
-                        <Route path='week' element={<WeekGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
-                        handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
-                        <Route path='month' element={<MonthGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
-                        handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
-                        <Route path='year' element={<YearGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
-                        handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
-                    </Route>
-                    <Route path='/rankings' element={<Rankings rankings={rankings} />} />
-                </Routes>
-
+            <Routes>
+                <Route path='/' element={<HomeTitle />} />
+                <Route path='/home' element={<Home userInfo={userInfo} />} />
+                <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
+                <Route path='/create-account' element={<CreateAccount />} />
+                <Route path='/fitness' element={<Fitness userInfo={userInfo} setFinishWorkout={setFinishWorkout} />} />
+                <Route path='/tasks' element={<Tasks userInfo={userInfo} taskInfo={taskInfo} getTaskInfo={getTaskInfo} getUserData={getUserData} />} />
+                <Route path='/goals' element={<Goals userInfo={userInfo} goalInfo={goalInfo} getGoalInfo={getGoalInfo} getUserData={getUserData} />} >
+                    <Route path='week' element={<WeekGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
+                    handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
+                    <Route path='month' element={<MonthGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
+                    handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
+                    <Route path='year' element={<YearGoals goalInfo={goalInfo} newGoal={newGoal} setNewGoal={setNewGoal}
+                    handleComplete={handleGoalComplete} handleDelete={handleGoalDelete} handleNewGoal={handleNewGoal} />} />
+                </Route>
+                <Route path='/rankings' element={<Rankings rankings={rankings} />} />
+            </Routes>
         </main>
     )
 }
