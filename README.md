@@ -2,10 +2,6 @@
 
 LockN is a web application built with Node.js and Express that helps users manage their fitness goals, track exercises, create workout plans, and compete on leaderboards. It features user authentication, task management, and goal tracking to keep users motivated and organized.
 
-## Live Demo
-
-Check out the live version of LockN: [https://lockn-dkxj.onrender.com/](https://lockn-dkxj.onrender.com/)
-
 ## Features
 
 - **User Authentication**: Secure login and account creation using bcrypt for password hashing.

@@ -1,0 +1,1191 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+  /* =========================
+     Colors
+  ========================= */
+  --color-background: #0b1326;
+  --color-on-background: #dae2fd;
+
+  --color-surface: #0b1326;
+  --color-surface-dim: #0b1326;
+  --color-surface-bright: #31394d;
+
+  --color-surface-container-lowest: #060e20;
+  --color-surface-container-low: #131b2e;
+  --color-surface-container: #171f33;
+  --color-surface-container-high: #222a3d;
+  --color-surface-container-highest: #2d3449;
+
+  --color-surface-variant: #2d3449;
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #ccc3d8;
+
+  --color-inverse-surface: #dae2fd;
+  --color-inverse-on-surface: #283044;
+
+  --color-outline: #958da1;
+  --color-outline-variant: #4a4455;
+
+  --color-surface-tint: #d2bbff;
+
+  --color-primary: #d2bbff;
+  --color-on-primary: #3f008e;
+  --color-primary-container: #7c3aed;
+  --color-on-primary-container: #ede0ff;
+  --color-inverse-primary: #732ee4;
+
+  --color-secondary: #4cd7f6;
+  --color-on-secondary: #003640;
+  --color-secondary-container: #03b5d3;
+  --color-on-secondary-container: #00424e;
+
+  --color-tertiary: #f9bd22;
+  --color-on-tertiary: #402d00;
+  --color-tertiary-container: #836100;
+  --color-on-tertiary-container: #ffe2ab;
+
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+
+  --color-primary-fixed: #eaddff;
+  --color-primary-fixed-dim: #d2bbff;
+  --color-on-primary-fixed: #25005a;
+  --color-on-primary-fixed-variant: #5a00c6;
+
+  --color-secondary-fixed: #acedff;
+  --color-secondary-fixed-dim: #4cd7f6;
+  --color-on-secondary-fixed: #001f26;
+  --color-on-secondary-fixed-variant: #004e5c;
+
+  --color-tertiary-fixed: #ffdf9f;
+  --color-tertiary-fixed-dim: #f9bd22;
+  --color-on-tertiary-fixed: #261a00;
+  --color-on-tertiary-fixed-variant: #5c4300;
+
+  /* Extra semantic aliases */
+  --color-text-heading: #ffffff;
+  --color-text-body: #94a3b8;
+  --color-card-border: #334155;
+  --color-input-border: #334155;
+
+  /* =========================
+     Typography
+  ========================= */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --font-display-lg-family: var(--font-sans);
+  --font-display-lg-size: 64px;
+  --font-display-lg-weight: 800;
+  --font-display-lg-line-height: 72px;
+  --font-display-lg-letter-spacing: -0.02em;
+
+  --font-headline-lg-family: var(--font-sans);
+  --font-headline-lg-size: 32px;
+  --font-headline-lg-weight: 700;
+  --font-headline-lg-line-height: 40px;
+  --font-headline-lg-letter-spacing: -0.01em;
+
+  --font-headline-lg-mobile-size: 24px;
+  --font-headline-lg-mobile-weight: 700;
+  --font-headline-lg-mobile-line-height: 32px;
+
+  --font-title-md-family: var(--font-sans);
+  --font-title-md-size: 18px;
+  --font-title-md-weight: 600;
+  --font-title-md-line-height: 24px;
+
+  --font-body-lg-family: var(--font-sans);
+  --font-body-lg-size: 16px;
+  --font-body-lg-weight: 400;
+  --font-body-lg-line-height: 24px;
+
+  --font-label-mono-family: var(--font-mono);
+  --font-label-mono-size: 12px;
+  --font-label-mono-weight: 500;
+  --font-label-mono-line-height: 16px;
+  --font-label-mono-letter-spacing: 0.05em;
+
+  /* =========================
+     Border Radius
+  ========================= */
+  --radius-sm: 0.25rem;
+  --radius-default: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* =========================
+     Spacing
+  ========================= */
+  --container-max: 1280px;
+  --gutter: 24px;
+  --margin-mobile: 16px;
+  --section-gap: 80px;
+
+  --stack-sm: 8px;
+  --stack-md: 16px;
+  --stack-lg: 32px;
+
+  /* =========================
+     Effects / Elevation
+  ========================= */
+  --blur-glass: 12px;
+
+  --surface-glass: rgba(23, 31, 51, 0.6);
+  --surface-card-gradient: linear-gradient(
+    135deg,
+    rgba(210, 187, 255, 0.15),
+    rgba(210, 187, 255, 0)
+  );
+
+  --shadow-glow-primary: 0 0 30px rgba(210, 187, 255, 0.2);
+  --shadow-focus-primary: 0 0 0 3px rgba(210, 187, 255, 0.2);
+
+  --border-card: 1px solid var(--color-card-border);
+  --border-ghost: 1px solid var(--color-outline-variant);
+
+  /* =========================
+     Transitions
+  ========================= */
+  --transition-fast: 150ms ease;
+  --transition-default: 200ms ease;
+}
+
+html {
+    background-color: var(--color-background);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.logo {
+    max-width: 2.5vw;
+    margin: -0.5vw;
+    margin-right: 6vw;
+    cursor: pointer;
+}
+
+.home-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    gap: 0;
+    flex-direction: column;
+}
+
+.home-name h1 {
+    font-family: var(--font-display-lg-family);
+    font-size: 150px;
+    font-weight: var(--font-display-lg-weight);
+    letter-spacing: var(--font-display-lg-letter-spacing);
+    line-height: 0.7em;
+
+    color: #FFFFFF;
+
+    text-shadow: 0 0 10px #BB9AFF;
+
+    margin: -20px;
+    padding: 0;
+}
+
+.home-name p {
+    font-family: var(--font-headline-lg-family);
+    font-size: var(--font-headline-lg-size);
+    font-weight: 200;
+    letter-spacing: var(--font-headline-lg-letter-spacing);
+    line-height: var(--font-headline-lg-line-height);
+    font-style: italic;
+
+    color: var(--color-text-body);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: var(--color-surface-container-low);
+    border-bottom: var(--color-outline) 1px solid;
+
+    padding: 25px;
+    top: 0;
+    left: 0;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 3vw;
+}
+
+.navbar-links > * {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    transition: 0.3s;
+}
+
+.navbar-links > *:hover {
+    color: #A476FF;
+    transition: 0.3s;
+}
+
+.login-btn {
+    background-color: #131B2E;
+    border: #6F778E 1px solid;
+    border-radius: 10px;
+    
+    font-family: 'JetBrains Mono', monospace;
+    color: #FFFFFF;
+    font-size: 16px;
+    width: 8vw;
+    height: 5vh;
+
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #283044;
+    color: #A476FF;
+    transition: 0.3s;
+}
+
+.start-btn {
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    font-size: 24px;
+
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    margin: 10px;
+    text-align: center;
+    align-items: center;
+    padding: 2vh;
+
+    background-color: #5A00C6;
+    background-image: linear-gradient(to bottom, #5A00C6 50%, #8D4FFF 50%);
+    background-size: 100% 200%;
+    background-position: top;
+    box-shadow: 0 0 10px #732EE4;
+
+    border: none;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.start-btn:hover {
+    background-position: bottom;
+    transform: scale(1.2);
+}
+
+.start-btn img {
+    transition: 0.3s;
+}
+
+.start-btn:hover img {
+    transition: 0.3s;
+    transform: rotate(30deg);
+}
+
+.login-container {
+    width: min(90%, 25vw);
+    height: 100%;
+    padding: 20px;
+    background-color: var(--color-surface-container);
+    justify-self: center;
+    text-align: center;
+    border: var(--color-card-border);
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    margin: 10vh;
+}
+
+.login-container h2 {
+    font-family: 'Inter', sans-serif;
+    color: #F8F9FA;
+    font-weight: 300;
+}
+
+.login-container p {
+    font-family: 'JetBrains Mono', monospace;
+    color: #F8F9FA;
+    font-weight: 200;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.login-container input {
+    background-color: var(--color-surface-container-low);
+    border: var(--color-card-border) 1px solid;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 200;
+    color: white;
+    padding: 15px;
+    width: 84%;
+}
+
+.login-container a {
+    color: #F8F9FA;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-container button {
+    width: 90%;
+    padding: 15px;
+}
+
+.login-container button:hover {
+    transform: scale(1.1);
+}
+
+.login-container hr {
+    margin-top: 50px;
+    border: #283044 1px solid;
+    width: 90%;
+}
+
+.login-links {
+    display: flex;
+    justify-self: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+
+.login-container .login-links > * {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 100;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.login-container .login-links > *:hover {
+    color: #A476FF;
+    transition: 0.2s;
+}
+
+.fitness-grid {
+    display: grid;
+    grid-template-areas:
+        'ranking reward pr'
+        'current-workout current-workout pr'
+        'other-workout other-workout pr';
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+    padding: 50px;
+}
+
+.fitness-grid .ranking, .reward, .pr, .current-workout {
+    background-color: var(--surface-glass);
+    border: var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: var(--stack-lg);
+
+    backdrop-filter: blur(var(--blur-glass));
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+}
+
+.card-title {
+    font-family: 'Inter', sans-serif;
+    font-optical-sizing: auto;
+    color: white;
+    font-weight: 500;
+    font-size: 32px;
+    font-style: normal;
+    line-height: 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.fitness-grid div.ranking {
+    grid-area: ranking;
+}
+
+.fitness-grid div.reward {
+    grid-area: reward;
+}
+
+.fitness-grid div.pr {
+    grid-area: pr;
+}
+
+.fitness-grid div.current-workout {
+    grid-area: current-workout;
+}
+
+.fitness-grid div.other-workout {
+    grid-area: other-workout;
+}
+
+.fitness-grid .rank-bubble {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #0a0f1b;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+
+    font-family: 'JetBrains Mono', monospace;
+    color: #DAE2FD;
+}
+
+.rank-bubble .rank-num {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 40px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.progress-num {
+    color: var(--color-primary);
+    font-family: var(--font-body-lg-family);
+    font-size: 50px;
+    font-weight: var(--font-body-lg-weight);
+    line-height: 0;
+}
+
+.progress-text {
+    color: var(--color-text-body);
+    font-family: var(--font-label-mono-family);
+    font-size: 14px;
+}
+
+.card-info {
+    font-family: var(--font-body-lg-family);
+    font-size: var(--font-body-lg-size);
+    font-weight: var(--font-body-lg-weight);
+    line-height: var(--font-body-lg-line-height);
+    color: var(--color-text-body);
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pr-bubble {
+    background-image: linear-gradient(to bottom, var(--color-surface-container-highest), var(--color-surface-container-high));
+    border: var(--border-ghost);
+    border-radius: var(--radius-default);
+    padding: var(--stack-lg);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.top-bubble {
+    font-family: var(--font-label-mono-family);
+    font-size: var(--font-title-md-size);
+    color: var(--color-primary);
+    line-height: 0;
+}
+
+.mid-bubble {
+    font-family: var(--font-display-lg-family);
+    font-size: var(--font-headline-lg-size);
+    color: var(--color-text-heading);
+    line-height: 0;
+}
+
+.num-bubble {
+    font-family: var(--font-sans);
+    font-size: var(--font-display-lg-size);
+    line-height: 0;
+    color: var(--color-secondary);
+    font-weight: var(--font-display-lg-weight);
+    margin-bottom: var(--stack-md);
+}
+
+.sub-text {
+    font-size: var(--font-body-lg-size);
+    color: var(--color-text-body);
+    font-weight: var(--font-body-lg-weight);
+}
+
+.card-title-sec {
+    font-family: var(--font-label-mono-family);
+    font-size: var(--font-title-md-size);
+    color: var(--color-text-body);
+    line-height: var(--font-title-md-line-height);
+}
+
+/* Old CSS */
+.mainHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    text-align: center;
+    margin: 1vh;
+}
+
+.leaderboard-path {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1vh;
+    overflow: hidden;
+}
+
+.leaderboard-path .arrow {
+    position: relative;
+    top: 0.03em;
+    font-size: 1.5em;
+    left: 0.1em;
+}
+
+.flex-container {
+    overflow: hidden;
+}
+
+@keyframes fadeInCards {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    } to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.home-card {
+    text-align: center;
+    width: 30%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    transform: translateY(30px);
+    opacity: 0;
+    animation: fadeInCards 0.8s 0s forwards;
+}
+
+.home-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.home-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.home-card h2 {
+    color: #F8F9FA;
+    font-weight: 200;
+    font-size: 64px;
+    margin-bottom: -55px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.home-card p {
+    color: #ADB5BD;
+    font-weight: 200;
+    font-size: 40px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.home-card button {
+    background-color: #C876FF;
+    color: #F8F9FA;
+    border-radius: 1000vw;
+    border: none;
+    width: 50%;
+    margin: 10px;
+    font-size: 36px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.home-card button:hover {
+    transform: translateY(-5px);    
+}
+
+.home-card a {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.home-card a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.login {
+    font-size: 24px;
+    color: #E9ECEF;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+}
+
+div.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.fitness-name {
+    font-size: 64px;
+    color: #F8F9FA;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    margin: 10px;
+    margin-top: -20px;
+    margin-bottom: -5px;
+    animation: fadeInTitle 0.8s 0s forwards;
+}
+
+@keyframes fadeInTitle {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    } to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.page-grid {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 65vh;
+}
+
+.page-grid p {
+    margin-top: 0px;
+}
+
+.page-grid > div {
+    border-style: solid;
+    border-color: #F8F9FA;
+    background-color: black;
+    border-width: 1px;
+    margin: 5px;
+    margin-top: 0;
+    color: #DEE2E6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 100;
+    text-align: center;
+    animation: fadeInCards 0.8s 0s forwards;
+}
+
+@media screen and (max-width: 600px) {
+    div.flex-container {
+        flex-direction: column;
+    }
+}
+
+.task-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.plan-container input {
+    background: none;
+    border-style: none none solid none;
+    border-color: #F8F9FA;
+    border-width: 1px;
+    margin: 1vh;
+    margin-left: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5vh;
+    width: 70vh;
+    color: #F8F9FA;
+}
+
+.plan-container input:focus {
+    outline: none;
+}
+
+.plan-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.plan-container button {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+}
+
+.plan-container table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.plan-container thead th {
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 64px;
+    padding: 10px;
+    font-weight: 200;
+    text-align: center;
+}
+
+.plan-container .fitness-subheader {
+    text-align: left;
+    font-size: 40px;
+}
+
+.plan-container td {
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 20px;
+    padding: 10px;
+    text-align: left;
+    font-weight: 200;
+}
+
+.plan-container button {
+    font-size: 3vh;
+    color: #F8F9FA;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+}
+
+.plan-container button:hover {
+    background-color: rgb(27, 27, 27);
+}
+
+.fitness-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    border: none !important;
+}
+
+.goal-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 90%;
+}
+
+.goal-btns {
+    font-size: 64px;
+}
+
+#weekly-goals, #monthly-goals, #yearly-goals {
+    width: 100%;
+}
+
+#goal-plan-container {
+    display: flex;
+    justify-content: baseline;
+}
+
+.add-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+}
+
+.add-container table {
+    width: 50%;
+    border: #F8F9FA solid 1px;
+    background-color: black;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.add-container thead {
+    border-bottom: #F8F9FA solid 1px;
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 30px;
+    padding: 10px;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    justify-self: center;
+}
+
+.add-container tbody {
+    display: block;
+    height: 65vh;
+    overflow-y: scroll;
+    justify-self: center;
+}
+
+.add-container tbody tr {
+    display: table;
+    table-layout: fixed;
+    justify-self: center;
+    width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .hide-on-mobile {
+        display: none;
+    }
+    div.leaderboard-flex {
+        flex-direction: column;
+    }
+    .goals-container input {
+        width: 95% !important;
+    }
+    .plan-container input {
+        width: 100% !important
+    }
+    div.path-flex {
+        flex-direction: column;
+        gap: 1em;
+    }
+}
+
+.add-container th td {
+    width: auto;
+}
+
+.add-container td {
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 20px;
+    padding: 10px;
+    text-align: left;
+}
+
+.add-container .add-btn {
+    padding: 5px 10px;
+    font-size: 24px;
+    font-weight: 100;
+    color: #F8F9FA;
+    background-color: #212529;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-container input {
+    background-color: transparent;
+    color: #F8F9FA;
+    border: none;
+    margin: 1vh;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3vh;
+    width: 95%;
+    height: 5vh;
+}
+
+.add-container button {
+    font-size: 18px;
+    color: #F8F9FA;
+    background-color: black;
+    cursor: pointer;
+    border: none;
+    width: 10vh;
+    margin: 1vh;
+    height: 5vh;
+}
+
+.add-container form {
+    display: flex;
+    flex-direction: row;
+}
+
+.add-workout-btn {
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    color: #F8F9FA;
+    font-size: 3rem !important;
+    margin-bottom: 2vh;
+}
+
+.confirm-workout {
+    margin: 2vh;
+    background-color: transparent;
+    bottom: 0;
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    color: #F8F9FA;
+    font-size: 5vh !important;
+}
+
+.add-workout-btn:hover {
+    cursor: pointer;
+}
+
+input:focus {
+    outline: none;
+}
+
+.leaderboard-container {
+    overflow: hidden;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    animation: fadeInCards 0.8s 0s forwards;
+}
+
+.leaderboard-container table {
+    background-color: black;
+    border: #F8F9FA;
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+    margin-top: 20px;
+    width: 50vh;
+}
+
+.leaderboard-container thead {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.leaderboard-container tbody {
+    display: block;
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+.leaderboard-container tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.leaderboard-container td {
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.leaderboard-container .subheader {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(0.5rem, 4vw, 1.5rem);
+    color: #F8F9FA;
+    text-align: center;
+}
+
+.leaderboard-container .theader {
+    font-family: 'Montserrat', sans-serif;
+    font-size: max(2rem, 4vh);
+    color: #F8F9FA;
+}
+
+.rankings-name {
+    font-size: 64px;
+    color: #F8F9FA;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    justify-self: center;
+    margin: -5px;
+    animation: fadeInTitle 0.8s 0s forwards;
+}
+
+.subheader th {
+    font-weight: 200;
+    color: #CED4DA;
+}
+
+.theader th {
+    font-weight: 200;
+}
+
+.edit-container input {
+    background-color: #212529;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 5vh;
+    margin: 1vh;
+    width: 95%;
+    color: #F8F9FA;
+}
+
+.edit-container input:focus {
+    outline: none;
+}
+
+.edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    width: 90%;
+}
+
+.edit-container table {
+    border: #F8F9FA solid 1px;
+    background-color: black;
+    border-collapse: collapse;
+    width: min(95%, 70vh);
+    margin: 1vh;
+}
+
+.edit-container thead th {
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 30px;
+    padding: 10px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.edit-container td {
+    font-family: 'Montserrat', sans-serif;
+    color: #F8F9FA;
+    font-size: 20px;
+    padding: 10px;
+    text-align: left;
+    font-weight: 200;
+}
+
+.edit-container button {
+    font-size: 3vh;
+    color: #F8F9FA;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.edit-container button:hover {
+    background-color: rgb(27, 27, 27);
+}
+
+.cancel-btn {
+    margin: 2vh;
+    text-decoration: none;
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    color: #F8F9FA;
+    font-size: 5vh !important;
+}
+
+
+.button-flex {
+    display: flex;
+    flex: row;
+    justify-content: space-between;
+}
+
+.path-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5em;
+}
+
+.loader {
+    border: 5px solid #696969;
+    border-top: 5px solid white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.center {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    z-index: 100;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.popup-inner {
+    position: relative;
+    padding: 32px;
+    width: 100%;
+    max-width: 1500px;
+}
+
+.new-task {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    margin: 3vh;
+}

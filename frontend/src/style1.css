@@ -30,6 +30,7 @@ body::after {
     max-width: 10vh;
     cursor: pointer;
 }
+
 .mainHeader {
     display: flex;
     flex-direction: column;
