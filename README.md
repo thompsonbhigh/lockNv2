@@ -1,41 +1,48 @@
-# LockN
+# LockN v2
 
-LockN is a web application built with Node.js and Express that helps users manage their fitness goals, track exercises, create workout plans, and compete on leaderboards. It features user authentication, task management, and goal tracking to keep users motivated and organized.
+LockN is a fitness tracker with a React dashboard and an Express API. Users can create an account, build and complete workouts, manage tasks and weekly, monthly, and yearly goals, and view leaderboards and groups. The API also contains an AI route for workout assistance.
 
-## Features
+## Stack
 
-- **User Authentication**: Secure login and account creation using bcrypt for password hashing.
-- **Exercise Management**: Add and track personal exercises.
-- **Goal Setting**: Set and monitor fitness goals.
-- **Workout Plans**: Create and manage personalized workout plans.
-- **Task Tracking**: Organize and complete fitness-related tasks.
-- **Leaderboards**: Compete with others based on tasks and goals completed.
-- **Responsive UI**: Built with EJS templates and static assets for a clean user interface.
+- React, React Router, and Vite in `frontend/`
+- Node.js and Express in `backend/`
+- PostgreSQL for accounts, workouts, tasks, goals, and rankings
 
-## Technologies Used
+## Run locally
 
-- **Backend**: Node.js, Express.js
-- **Database**: PostgreSQL (with pg and pg-promise)
-- **Authentication**: bcrypt, jsonwebtoken, express-session
-- **Frontend**: EJS (Embedded JavaScript Templates), CSS
-- **Other**: cookie-parser, body-parser, dotenv
+You need Node.js, npm, and access to the PostgreSQL database configured in `backend/db.js`. The checked-in SQL under `backend/sql/` does **not** define the entire application schema, so a fresh database cannot be initialized from this repository alone.
 
-## Usage
+1. In `backend/`, run `npm ci`.
+2. Create `backend/.env` with your own values:
 
-- Visit the home page to view your dashboard (requires login).
-- Create an account or log in to access features.
-- Add exercises, set goals, create plans, and track progress.
-- View leaderboards to see how you rank against other users.
+   ```dotenv
+   PASSWORD=your_database_password
+   SESSION_SECRET=replace_with_a_random_secret
+   JWT_SECRET=replace_with_a_random_secret
+   OPENAI_API_KEY=your_key_if_using_ai
+   ```
 
-## Project Structure
+3. Run `npm run dev` in `backend/`. The API listens on `http://localhost:3000`.
+4. In `frontend/`, run `npm ci`. Create `frontend/.env` containing:
 
-- `app.js`: Main application file.
-- `db.js`: Database connection and queries.
-- `routes/`: Contains route handlers for different features.
-- `views/`: EJS templates for rendering pages.
-- `public/`: Static assets (CSS, images, fonts).
-- `sql/`: Database schema and setup scripts.
+   ```dotenv
+   VITE_BACKEND_URL=http://localhost:3000
+   ```
 
-## Author
+5. Run `npm run dev` in `frontend/` and open `http://localhost:5173`.
 
-Thompson High
+`backend/db.js` currently fixes the database host and user to a Supabase pooler; `PASSWORD` supplies only its password. To use another PostgreSQL instance, update that connection configuration. The AI route requires an OpenAI key.
+
+Docker Compose can start both Node services with `docker compose up --build`, after creating the same `.env` files. The Compose file does not start PostgreSQL.
+
+## Project layout
+
+| Path | Purpose |
+| --- | --- |
+| `frontend/src/pages/` | Dashboard, authentication, workouts, tasks, goals, and rankings |
+| `backend/app.js` | API server, sessions, and route mounting |
+| `backend/routes/` | Feature endpoints |
+| `backend/db/` | Queries for workouts, tasks, and goals |
+| `backend/services/` | AI integration |
+
+Run `npm run lint` and `npm run build` from `frontend/` to check frontend changes. The backend's `npm test` script is a placeholder.
